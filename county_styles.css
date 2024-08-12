@@ -1,0 +1,31 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+.navbar {
+    margin-bottom: 0;
+}
+
+#county-map {
+    width: 300px;
+    height: 300px;
+    position: absolute;
+    /* Adjusted the top property to 100px to ensure it sits below the navbar */
+    top: 100px;
+    right: 20px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Optional: Responsive adjustment for smaller screens */
+@media (max-width: 576px) {
+    #county-map {
+        width: 250px;
+        height: 250px;
+        top: 120px; /* Slightly more space for collapsed navbar */
+        right: 10px;
+    }
+}
