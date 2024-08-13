@@ -1,20 +1,25 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>County Information</title>
-    <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Leaflet CSS -->
-    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
-    <!-- Custom CSS -->
-    <link rel="stylesheet" href="county_styles.css">
-    <!-- Chart.js -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>County Information</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Leaflet CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="county_styles.css">
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <!-- jsPDF and html2canvas -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 </head>
+
 <body>
-    <!-- Navigation Bar -->
+  <!-- Navigation Bar -->
   <nav class="navbar navbar-expand-lg">
     <div class="container-fluid">
       <a class="navbar-brand" href="#">Social Determinants of Health + Cardiovascular Disease</a>
@@ -35,28 +40,50 @@
     </div>
   </nav>
 
-    <!-- Content Section -->
-    <div id="content">
-        <!-- Map Container -->
-        <div id="map-container">
-            <h1 id="county-name">Loading...</h1>
-            <p id="county-description">Please wait while we load the county information.</p>
-            <div id="county-map"></div>
-            <input type="range" id="year-slider" min="2015" max="2025" value="2015" step="1">
-            <div id="selected-year">2015</div>
-        </div>
-
-        <!-- Chart Container -->
-        <div id="chart-container">
-            <canvas id="deathsChart"></canvas>
-        </div>
+  <!-- Content Section -->
+  <div id="content">
+    <!-- Map Container -->
+    <div id="map-container">
+      <h1 id="county-name">Loading...</h1>
+      <p id="county-description">Please wait while we load the county information.</p>
+      <div id="county-map"></div>
+      <input type="range" id="year-slider" min="2015" max="2025" value="2015" step="1" class="form-range">
+      <div id="selected-year" class="text-center fw-bold">2015</div>
     </div>
 
-    <!-- Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <!-- Leaflet JS -->
-    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-    <!-- Custom JS -->
-    <script src="county_script.js"></script>
+    <!-- Chart Container -->
+    <div id="chart-container">
+      <canvas id="deathsChart"></canvas>
+    </div>
+
+    <!-- Feature Weights Container -->
+    <div id="feature-weights-container" class="card">
+      <div class="card-body">
+        <h3 class="card-title">Feature Weights</h3>
+        <table id="feature-weights-table" class="table table-sm table-striped">
+          <thead class="table-light">
+            <tr>
+              <th>Feature</th>
+              <th>Weight</th>
+            </tr>
+          </thead>
+          <tbody id="feature-weights-list">
+            <!-- Feature weights will be populated here -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- Generate Report Button -->
+  <button id="generate-report" class="btn btn-primary" style="position: fixed; bottom: 20px; right: 20px;">Generate Report</button>
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <!-- Leaflet JS -->
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+  <!-- Custom JS -->
+  <script src="county_script.js"></script>
 </body>
+
 </html>

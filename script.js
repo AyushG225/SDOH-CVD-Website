@@ -158,15 +158,12 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     }
 
+    let activeTooltip = null; // Variable to track the active tooltip
+    let tooltipOpened = false; // Flag to check if the tooltip is opened
+
     function onEachFeature(feature, layer) {
         var countyCode = feature.properties.GEOID;
         var stateAbbr = stateAbbreviations[feature.properties.STATEFP];
-    
-        // Store the original style
-        const originalStyle = getCountyStyle(feature);
-    
-        // Set the initial style
-        layer.setStyle(originalStyle);
     
         function updateTooltipContent() {
             var year = document.getElementById('year-slider').value;
@@ -183,8 +180,6 @@ document.addEventListener("DOMContentLoaded", function () {
             });
         }
     
-        let activeTooltip = null; // Variable to track the active tooltip
-    
         layer.on('mouseover', function () {
             if (activeTooltip) {
                 activeTooltip.closeTooltip(); // Close any existing active tooltip
@@ -192,24 +187,38 @@ document.addEventListener("DOMContentLoaded", function () {
             updateTooltipContent();  // Update the tooltip content on hover
             layer.openTooltip();  // Show tooltip on hover
             activeTooltip = layer; // Set the current layer as the active tooltip
+            tooltipOpened = true; // Mark that the tooltip is opened
         });
     
         layer.on('mouseout', function () {
-            layer.closeTooltip();  // Hide tooltip when not hovering
-            activeTooltip = null; // Clear the active tooltip when the mouse leaves
+            if (tooltipOpened) {
+                layer.closeTooltip();  // Hide tooltip when not hovering
+                activeTooltip = null; // Clear the active tooltip
+                tooltipOpened = false; // Reset the tooltip flag
+            }
         });
     
-        let clickedOnce = false; // Flag to track the first click
-    
         layer.on('click', function () {
-            if (!clickedOnce) {
-                map.fitBounds(layer.getBounds()); // Zoom to county on first click
-                clickedOnce = true;
+            var currentZoom = map.getZoom();
+            if (currentZoom > 7) {  // Assuming 10 is the zoom threshold
+                window.location.href = `county_info.html?county=${feature.properties.GEOID}`;
             } else {
-                window.location.href = `county_info.html?county=${feature.properties.GEOID}`; // Navigate to county page on second click
+                map.flyToBounds(layer.getBounds(), {
+                    duration: 1.5, // Duration of the zoom animation in seconds
+                    easeLinearity: 0.25 // Control the easing of the animation
+                });
             }
         });
     }
+
+    // Close any active tooltip when the map starts moving
+    map.on('movestart', function () {
+        if (activeTooltip) {
+            activeTooltip.closeTooltip();
+            activeTooltip = null;
+            tooltipOpened = false; // Reset the tooltip flag
+        }
+    });
 
     // Debounce function to limit how often the updateMapColor function is called
     function debounce(func, wait) {

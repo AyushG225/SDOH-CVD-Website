@@ -40,6 +40,8 @@ body {
 #selected-year {
     margin-top: 10px;
     text-align: center;
+    font-size: 1.2rem;
+    font-weight: bold;
 }
 
 #chart-container {
@@ -61,4 +63,40 @@ body {
         width: 100%;
         margin-bottom: 20px;
     }
+}
+
+#feature-weights-container {
+    margin-top: 20px;
+    width: 48%; /* Same width as the map */
+    max-height: 300px; /* Adjust the height to make it shorter */
+    overflow-y: auto; /* Enable vertical scrolling if the content exceeds the height */
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.card-title {
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+#feature-weights-table {
+    width: 100%;
+    table-layout: fixed; /* Make columns have equal width */
+}
+
+#feature-weights-table th, #feature-weights-table td {
+    padding: 8px 12px;
+    text-align: left;
+    white-space: nowrap; /* Prevent wrapping of text */
+}
+
+#feature-weights-table th {
+    background-color: #f8f9fa;
+    font-weight: bold;
+}
+
+#feature-weights-table tr:nth-child(even) {
+    background-color: #f2f2f2;
 }
