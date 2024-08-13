@@ -38,6 +38,11 @@
     </div>
   </nav>
 
+  <!-- Map Title -->
+  <div class="map-title-container">
+    <h2 class="map-title">Most Important Variables Affecting Cardiovascular Disease Death Rates Over Time</h2>
+  </div>
+
   <!-- Search Bar -->
   <div class="search-bar-container position-relative">
     <input type="text" class="form-control" id="search-input" placeholder="Search by county name or FIPS code...">
@@ -46,9 +51,12 @@
 
   <div id="loading-spinner"></div>
 
-  <!-- US Map -->
   <div class="map-container">
     <div id="us-map"></div>
+    <!-- Reset Button -->
+    <button id="reset-map" class="leaflet-control leaflet-bar" title="Reset Map">
+      <i class="fas fa-undo"></i>
+    </button>
     <!-- Year Slider -->
     <div class="year-slider-container">
       <input type="range" id="year-slider" min="2015" max="2025" value="2015" step="1" class="slider" list="tickmarks">
@@ -67,8 +75,9 @@
       </datalist>
       <div id="selected-year">2015</div>
     </div>
-
   </div>
+
+
 
   <!-- Scroll Down Indicator -->
   <div class="scroll-down-indicator"
@@ -76,61 +85,210 @@
     <a href="#description-section"><i class="fas fa-chevron-down"></i></a>
   </div>
 
-  <!-- Description Section -->
   <div class="description-container" id="description-section">
     <div class="container">
-      <h2>Description</h2>
-      <p>
-        Is alias nomen id du modis co. Im jactantur consuetae ad summopere. Bono via iis rei prae unde quid haud alia.
-        Cap non quid volo nudi. Egisse matura sua duo unitas somnio pulses sed deponi. Mo conformes ob consuetae ut
-        opiniones ne. Habuimus curantes ut rerumque rationes to.
+      <div class="row">
+        <!-- Left Column: Description Text -->
+        <div class="col-md-6 text-left">
+          <h2>Description</h2>
+          <p>
+            This interactive map project visualizes the most important social determinants of health affecting
+            cardiovascular disease death rates across U.S. counties over time. By integrating real-world data and
+            predictive
+            forecasts, the map highlights key variables such as years of potential life lost rate, uninsured rates, and
+            more, providing users with a dynamic tool to explore health disparities at the county level.<br><br>
 
-        Et esse apud suam unum aspi ut. Ei manifestam complector si ab eo judicarent appellatur. Im meam to de volo quid
-        eo. Notionibus accidentia potentiale ac ne. Idem eram novo rum jam vera eam. Quarta de vi nullam et ii quoque.
-        Ullos cogit extat utens vi ob veras ac at. Earumque aeternum si perfecti suspicio interdum ii quaesita. Effectus
-        ha totumque re an ab revocari figurata ejusmodi infinite.
+            Key features of this project include:<br><br>
 
-        Eo ha diversitas perspicuum praecipuus potentiale at in sequuturum. Lucem suo aliis ullam age rerum. Tangatur ii
-        ob convenit turbatus ad dumtaxat. Ii ac mentemque componant in ad suscipere effecerit rationale somniemus.
-        Archimedes mo labefactat quaerendum deceperunt ad ex at. Uno veritatem aut ego solvendae argumenta excaecant.
+            <strong>Yearly Data Visualization</strong>: Users can explore data across different years, from 2015 to
+            2023,
+            and examine forecasted trends for 2024 and 2025. The color-coded map provides an intuitive way to understand
+            which social determinants have the most significant impact on cardiovascular health in each county.<br><br>
 
-        Nec res una proinde chartam requiri quaenam confuse. De ea se tamquam haberet exempli memores ipsarum ob. Earum
-        se athei vi erunt. Si ad exhibent reperiri perpauca ab physicam invenero. Veluti unquam loquar easdem sua errare
-        fas imo. Clara harum ipsis tamen ac ha longa co at mente. Ii si videretur ac contineri occurrere remanetne
-        deleantur. Istam nomen in lucis ab donum volui quare.
+            <strong>In Depth Unique County Information</strong>: Users can click on counties to zoom into a specific
+            county.
+            Once the user clicks into a zoomed county, the website will bring up a county unique page displaying a line
+            chart of death rates (including a forecast), and the most important variables each year.<br><br>
 
-        Fundamenta cohaereant tot nul appellatur intelligam permiscent age. Ei loco deus puto quum gi ipsi eo fuse ex.
-        Seorsim credent vi liberet id se to ignorem. Operatione attendendo satyriscos sim etc. Cujuspiam suffossis
-        indidisse ei me realitate. Rei extensum figurata fas utrimque pleraque formalem nec mentibus. Istud manus ac
-        debet et illud prius. Rei ignorata aliasque immorari vigiliam ope. Judicavi nec est deficere creditum universo.
+            <strong>Interactive Search and Navigation</strong>: The map allows users to search for specific counties by
+            name
+            or FIPS code, providing an easy way to zoom in on areas of interest. The interactive legend helps users
+            filter
+            the map to focus on particular health determinants.<br><br>
 
-        Cap hominem diverso conabor ita conatus dispari nec necesse. Deinceps dum contumax utilitas aetheris advenire
-        nec via. Pro serie causa nudam debet ideas sum nam qui verum. Me homines ex assidue ut defectu hominem an.
-        Statuere vox est profecto incipere. Mutationum re rationibus cogitantem ab durationem ut imaginabar de. Haud
-        ullo visu sex adeo illi eae apti. Habentur ea ac ad videntur meliores interdum.
+            <strong>Forecasting Future Trends</strong>: By incorporating forecast data, users can gain insights into how
+            the
+            most critical health determinants are expected to evolve, helping policymakers and health professionals make
+            informed decisions about future interventions.<br><br>
 
-        Expendere rea eos scientiam assentiri tantumque aliquibus. Is ex aliquot saporem corpore at obscure. Cui veri
-        quo dat sine ibi nudi dare. Nonnisi aperire et diversi majoris visione an vi. Rom ponderibus respondeam
-        imaginarer hic externarum. Nudi suam de ha nunc ecce at in sine. Ne longo tenus ii du ferri et. Via tes excludat
-        lectorum quaerere suo nam.
-
-        Potui habeo visus ens mea. An vi re continetur me familiarem negationem. Rei inveniri jam viderunt subducam tam
-        imponere jam. Sub cui more ipsi meum. Ei im patiatur ha an utcunque vestibus. Duo dum enim cui vera tunc. Sed
-        permiscent suo supponatur via diversitas perfectius asseverent satyriscos. Ullam debet vetus cur verae cerae
-        meo. Ad an tactio pendeo certus accepi missae quarum.
-
-        Omni nisi cum tes huic quae sive. Objectivus corrigatur attigerint transferre gi solutiones ac. Co soni meos ii
-        toga. Simplex sensuum materia eas innatas possint lor rom halitus. Realem videbo aliqua is dignum to optima an
-        mo. Fore vita mo ordo haec ex. Quarta nondum illico aliter gi ignoro de id quidam. Ope factas quovis magnis
-        cogito dat ubi partim.
-
-        Prudentiae perciperem reperiatur eos excoluisse sequeretur est ego eae. Voce nam dico apta tam alio. Et ipsa
-        nunc ob viam soni suum bere. Du ac ut explicatur imaginabor facultates ponderibus et indubitata. Rea videlicet
-        eversioni pro obversari. Numquam sap apparet columen ens purpura. Incertas potentem ii affectus placidae si
-        assignem.
-      </p>
+            This project serves as a valuable tool for public health officials, researchers, and anyone interested in
+            understanding and addressing the factors contributing to cardiovascular disease at the local level.
+          </p>
+        </div>
+        <!-- Right Column: Variable Description Table -->
+        <div class="col-md-6">
+          <h3>Variable Description</h3>
+          <table id="variable-description-table" class="table table-dark table-striped">
+            <thead>
+              <tr>
+                <th scope="col">Variable</th>
+                <th scope="col">Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td># associations_per_1000</td>
+                <td>The number of social, civic, and religious associations per 1,000 population, indicating levels of
+                  community engagement and social capital.</td>
+              </tr>
+              <tr>
+                <td># chlamydia cases_per_1000</td>
+                <td>The number of reported chlamydia cases per 1,000 population, indicating the prevalence of this
+                  sexually transmitted infection.</td>
+              </tr>
+              <tr>
+                <td># dentists_per_1000</td>
+                <td>The number of dentists per 1,000 population, indicating the availability of dental care in the
+                  community.</td>
+              </tr>
+              <tr>
+                <td># driving deaths_per_1000</td>
+                <td>The number of deaths resulting from motor vehicle accidents per 1,000 population.</td>
+              </tr>
+              <tr>
+                <td># injury deaths_per_1000</td>
+                <td>The number of deaths due to injuries per 1,000 population, a measure of fatal injuries in the
+                  community.</td>
+              </tr>
+              <tr>
+                <td># primary care physicians_per_1000</td>
+                <td>The number of primary care physicians per 1,000 population, reflecting access to basic healthcare
+                  services.</td>
+              </tr>
+              <tr>
+                <td># some college_per_1000</td>
+                <td>The number of people per 1,000 population who have attended some college but have not earned a
+                  degree, indicating educational attainment in the community.</td>
+              </tr>
+              <tr>
+                <td># uninsured_per_1000</td>
+                <td>The number of people per 1,000 population who lack health insurance, reflecting access to healthcare
+                  coverage.</td>
+              </tr>
+              <tr>
+                <td># unemployed_per_1000</td>
+                <td>The number of unemployed individuals per 1,000 population, reflecting economic conditions and job
+                  availability.</td>
+              </tr>
+              <tr>
+                <td># workers who drive alone_per_1000</td>
+                <td>The number of workers per 1,000 population who commute alone by car, indicating commuting patterns
+                  and reliance on private vehicles.</td>
+              </tr>
+              <tr>
+                <td>% children in poverty</td>
+                <td>The percentage of children under 18 living in households with incomes below the poverty line,
+                  reflecting socioeconomic conditions that can impact health and well-being.</td>
+              </tr>
+              <tr>
+                <td>% long commute - drives alone</td>
+                <td>The percentage of workers who drive alone for 30 minutes or more to work, which can impact physical
+                  activity levels and contribute to stress.</td>
+              </tr>
+              <tr>
+                <td>% physically inactive</td>
+                <td>The percentage of adults who report no physical activity during their leisure time, a risk factor
+                  for various chronic diseases.</td>
+              </tr>
+              <tr>
+                <td>% severe housing problems</td>
+                <td>The percentage of households facing severe housing issues, including overcrowding, high housing
+                  costs relative to income, or lack of basic amenities like plumbing or kitchen facilities.</td>
+              </tr>
+              <tr>
+                <td>% some college</td>
+                <td>The percentage of adults aged 25-44 who have attended some college but have not earned a degree,
+                  indicating educational attainment.</td>
+              </tr>
+              <tr>
+                <td>% unemployed</td>
+                <td>The percentage of the labor force that is unemployed, an indicator of economic health and stability.
+                </td>
+              </tr>
+              <tr>
+                <td>% uninsured</td>
+                <td>The percentage of the population without health insurance coverage, which can limit access to
+                  healthcare services and contribute to poor health outcomes.</td>
+              </tr>
+              <tr>
+                <td>20th percentile income</td>
+                <td>The income level below which 20% of the population falls, often used to assess the income levels of
+                  the lower end of the economic spectrum.</td>
+              </tr>
+              <tr>
+                <td>80th percentile income</td>
+                <td>The income level below which 80% of the population falls, indicating the higher end of the income
+                  distribution in a community.</td>
+              </tr>
+              <tr>
+                <td>average daily pm2.5</td>
+                <td>The average daily concentration of fine particulate matter (PM2.5) in the air, which is linked to
+                  respiratory and cardiovascular health issues.</td>
+              </tr>
+              <tr>
+                <td>chlamydia rate</td>
+                <td>The rate of chlamydia infections per population, indicating the prevalence of this common sexually
+                  transmitted infection in a community.</td>
+              </tr>
+              <tr>
+                <td>dentist rate</td>
+                <td>The number of dentists per population, reflecting the availability of dental care services in a
+                  community.</td>
+              </tr>
+              <tr>
+                <td>food environment index</td>
+                <td>A composite measure of factors that contribute to a healthy food environment, including access to
+                  healthy foods and food security.</td>
+              </tr>
+              <tr>
+                <td>income ratio</td>
+                <td>The ratio of income at the 80th percentile to income at the 20th percentile, used to assess income
+                  inequality within a population.</td>
+              </tr>
+              <tr>
+                <td>injury death rate</td>
+                <td>The rate of deaths caused by injuries per population, including those from accidents, violence, and
+                  other external causes.</td>
+              <tr>
+                <td>labor force</td>
+                <td>The total number of people aged 16 and over who are either employed or actively seeking employment,
+                  reflecting the economic activity of a population.</td>
+              </tr>
+              <tr>
+                <td>population</td>
+                <td>The total number of people living in a given area, used as a basic measure of population size and
+                  density.</td>
+              </tr>
+              <tr>
+                <td>teen birth rate</td>
+                <td>The number of live births per 1,000 females aged 15-19, used to assess adolescent reproductive
+                  health and related social factors.</td>
+              </tr>
+              <tr>
+                <td>years of potential life lost rate</td>
+                <td>A measure of premature mortality that quantifies the years of life lost due to death before a
+                  certain age, often used to assess the impact of early death on a population.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
     </div>
   </div>
+
+
+
+
 
   <!-- Bootstrap JS -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
@@ -141,6 +299,5 @@
   <!-- Custom JS -->
   <script src="script.js"></script>
 </body>
-
 
 </html>
