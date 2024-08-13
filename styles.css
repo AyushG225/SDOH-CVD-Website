@@ -2,10 +2,28 @@ body {
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
+    background-color: #000;
+    /* Black background */
+    color: #fff;
+    /* White text */
 }
 
 .navbar {
-    margin-bottom: 0;
+    background-color: #333;
+    /* Dark gray for the navbar */
+    border-bottom: 2px solid #555;
+    /* Slightly lighter border */
+}
+
+.navbar-brand,
+.nav-link {
+    color: #fff !important;
+    /* White text */
+}
+
+.navbar-toggler-icon {
+    filter: invert(1);
+    /* White icon */
 }
 
 .search-bar-container {
@@ -13,7 +31,8 @@ body {
     padding: 15px;
     display: flex;
     justify-content: center;
-    background-color: #f8f9fa;
+    background-color: #222;
+    /* Dark gray background */
     position: relative;
     z-index: 1001;
 }
@@ -25,14 +44,20 @@ body {
     position: relative;
     z-index: 1002;
     padding-right: 10px;
+    background-color: #fff;
+    /* White background */
+    color: #000;
+    /* Black text */
 }
 
 #suggestions {
-    background: white;
-    border: 1px solid #ced4da;
+    background: #333;
+    /* Dark gray for suggestion box */
+    border: 1px solid #555;
+    /* Slightly lighter border */
     margin-top: 40px;
     border-radius: 0 0 10px 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 8px rgba(255, 255, 255, 0.1);
     max-height: 200px;
     overflow-y: auto;
     position: absolute;
@@ -42,17 +67,23 @@ body {
 #suggestions .list-group-item {
     cursor: pointer;
     padding: 10px 15px;
+    color: #fff;
+    /* White text */
+    background-color: #333;
+    /* Dark gray background */
 }
 
 #suggestions .list-group-item:hover {
-    background-color: #f1f1f1;
+    background-color: #555;
+    /* Lighter gray on hover */
 }
 
 .map-container {
     padding: 0;
     display: flex;
     justify-content: center;
-    background-color: #e9ecef;
+    background-color: #000;
+    /* Black background */
     position: relative;
 }
 
@@ -60,17 +91,21 @@ body {
     width: 100%;
     height: 75vh;
     position: relative;
+    border: 2px solid #555;
+    /* Dark gray border around the map */
+    border-radius: 10px;
 }
 
 .year-slider-container {
     position: absolute;
-    bottom: 10px;  /* Position at the bottom of the map */
+    bottom: 10px;
     left: 50%;
     transform: translateX(-50%);
     width: 80%;
     text-align: center;
-    z-index: 1002;  /* Ensure it is on top of the map */
-    background-color: rgba(255, 255, 255, 0.7);  /* Semi-transparent background */
+    z-index: 1002;
+    background: rgba(255, 255, 255, 0.1);
+    /* Semi-transparent white */
     padding: 10px;
     border-radius: 10px;
 }
@@ -79,9 +114,134 @@ body {
     width: 100%;
 }
 
+#year-slider::-webkit-slider-runnable-track {
+    background: linear-gradient(to right, #ddd 0%, #ddd 100%);
+}
+
+#year-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    background: #007bff;
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    cursor: pointer;
+    margin-top: -6px;
+}
+
+#year-slider::-moz-range-thumb {
+    background: #007bff;
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+#year-slider::-ms-thumb {
+    background: #007bff;
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+/* Style for tickmarks */
+#tickmarks option {
+    background-color: transparent;
+}
+
+#tickmarks option[value="2015"]:before {
+    content: "2015";
+    position: absolute;
+    left: 0%;
+    top: 30px;
+    transform: translateX(-50%);
+}
+
+#tickmarks option[value="2016"]:before {
+    content: "2016";
+    position: absolute;
+    left: 10%;
+    top: 30px;
+    transform: translateX(-50%);
+}
+
+#tickmarks option[value="2017"]:before {
+    content: "2017";
+    position: absolute;
+    left: 20%;
+    top: 30px;
+    transform: translateX(-50%);
+}
+
+#tickmarks option[value="2018"]:before {
+    content: "2018";
+    position: absolute;
+    left: 30%;
+    top: 30px;
+    transform: translateX(-50%);
+}
+
+#tickmarks option[value="2019"]:before {
+    content: "2019";
+    position: absolute;
+    left: 40%;
+    top: 30px;
+    transform: translateX(-50%);
+}
+
+#tickmarks option[value="2020"]:before {
+    content: "2020";
+    position: absolute;
+    left: 50%;
+    top: 30px;
+    transform: translateX(-50%);
+}
+
+#tickmarks option[value="2021"]:before {
+    content: "2021";
+    position: absolute;
+    left: 60%;
+    top: 30px;
+    transform: translateX(-50%);
+}
+
+#tickmarks option[value="2022"]:before {
+    content: "2022";
+    position: absolute;
+    left: 70%;
+    top: 30px;
+    transform: translateX(-50%);
+}
+
+#tickmarks option[value="2023"]:before {
+    content: "2023";
+    position: absolute;
+    left: 80%;
+    top: 30px;
+    transform: translateX(-50%);
+}
+
+#tickmarks option[value="2024"]:before {
+    content: "2024 (Forecast)";
+    position: absolute;
+    left: 90%;
+    top: 30px;
+    transform: translateX(-50%);
+}
+
+#tickmarks option[value="2025"]:before {
+    content: "2025 (Forecast)";
+    position: absolute;
+    left: 100%;
+    top: 30px;
+    transform: translateX(-50%);
+}
+
 #selected-year {
     font-size: 18px;
     margin-top: 10px;
+    color: #fff;
+    /* White text */
 }
 
 .scroll-down-indicator {
@@ -89,27 +249,34 @@ body {
     height: 50px;
     line-height: 50px;
     cursor: pointer;
+    color: #fff;
+    /* White icon */
 }
 
 .scroll-down-indicator a {
     font-size: 32px;
-    color: #333;
+    color: #fff;
+    /* White arrow */
     text-decoration: none;
     transition: color 0.3s ease;
 }
 
 .scroll-down-indicator:hover a {
-    color: #007bff;
+    color: #aaa;
+    /* Lighter gray on hover */
 }
 
 .description-container {
     padding: 30px 0;
-    background-color: #f8f9fa;
+    background-color: #111;
+    /* Very dark gray background */
     text-align: center;
 }
 
 .description-container h2 {
     margin-bottom: 20px;
+    color: #fff;
+    /* White text */
 }
 
 .description-container p {
@@ -117,8 +284,9 @@ body {
     line-height: 1.5;
     margin: 0 auto;
     max-width: 800px;
+    color: #ddd;
+    /* Light gray text */
 }
-
 
 input[type="range"] {
     -webkit-appearance: none;
@@ -132,17 +300,19 @@ input[type="range"]::-webkit-slider-runnable-track {
     height: 8.4px;
     cursor: pointer;
     box-shadow: 1.0px 1.0px 1.0px #000000;
-    background: #3071a9;
+    background: #444;
+    /* Dark gray track */
     border-radius: 1.3px;
     border: 0.2px solid #010101;
 }
 
 input[type="range"]::-webkit-slider-thumb {
-    border: 1px solid #000000;
+    border: 1px solid #000;
     height: 36px;
     width: 16px;
     border-radius: 3px;
-    background: #ffffff;
+    background: #fff;
+    /* White thumb */
     cursor: pointer;
     -webkit-appearance: none;
     margin-top: -14px;
@@ -156,18 +326,20 @@ input[type="range"]::-moz-range-track {
     width: 100%;
     height: 8.4px;
     cursor: pointer;
-    box-shadow: 1.0px 1.0px 1.0px #000000;
-    background: #3071a9;
+    box-shadow: 1.0px 1.0px 1.0px #000;
+    background: #444;
+    /* Dark gray track */
     border-radius: 1.3px;
     border: 0.2px solid #010101;
 }
 
 input[type="range"]::-moz-range-thumb {
-    border: 1px solid #000000;
+    border: 1px solid #000;
     height: 36px;
     width: 16px;
     border-radius: 3px;
-    background: #ffffff;
+    background: #fff;
+    /* White thumb */
     cursor: pointer;
 }
 
@@ -182,33 +354,72 @@ input[type="range"]::-ms-track {
 }
 
 input[type="range"]::-ms-fill-lower {
-    background: #3071a9;
+    background: #444;
+    /* Dark gray fill */
     border: 0.2px solid #010101;
     border-radius: 2.6px;
-    box-shadow: 1.0px 1.0px 1.0px #000000;
+    box-shadow: 1.0px 1.0px 1.0px #000;
 }
 
 input[type="range"]::-ms-fill-upper {
-    background: #3071a9;
+    background: #444;
+    /* Dark gray fill */
     border: 0.2px solid #010101;
     border-radius: 2.6px;
-    box-shadow: 1.0px 1.0px 1.0px #000000;
+    box-shadow: 1.0px 1.0px 1.0px #000;
 }
 
 input[type="range"]::-ms-thumb {
-    border: 1px solid #000000;
+    border: 1px solid #000;
     height: 36px;
     width: 16px;
     border-radius: 3px;
-    background: #ffffff;
+    background: #fff;
+    /* White thumb */
     cursor: pointer;
     height: 8.4px;
 }
 
 input[type="range"]:focus::-ms-fill-lower {
-    background: #3071a9;
+    background: #444;
+    /* Dark gray fill */
 }
 
 input[type="range"]:focus::-ms-fill-upper {
-    background: #3071a9;
+    background: #444;
+    /* Dark gray fill */
+}
+
+/* Loading spinner styles */
+#loading-spinner {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border: 16px solid #f3f3f3;
+    border-radius: 50%;
+    border-top: 16px solid #3498db;
+    width: 120px;
+    height: 120px;
+    animation: spin 2s linear infinite;
+    z-index: 1000;
+    display: none;
+    /* Initially hidden */
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+/* Make sure the map container covers the entire space and sits below the spinner */
+#map-container {
+    position: relative;
+    width: 100%;
+    height: 100%;
 }

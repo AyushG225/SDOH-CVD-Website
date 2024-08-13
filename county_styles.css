@@ -8,24 +8,57 @@ body {
     margin-bottom: 0;
 }
 
+#content {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    padding: 20px;
+}
+
+#map-container {
+    width: 48%;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
 #county-map {
-    width: 300px;
-    height: 300px;
-    position: absolute;
-    /* Adjusted the top property to 100px to ensure it sits below the navbar */
-    top: 100px;
-    right: 20px;
+    width: 100%;
+    height: 400px;
     border: 1px solid #ccc;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-/* Optional: Responsive adjustment for smaller screens */
-@media (max-width: 576px) {
-    #county-map {
-        width: 250px;
-        height: 250px;
-        top: 120px; /* Slightly more space for collapsed navbar */
-        right: 10px;
+#year-slider {
+    width: 100%;
+    margin-top: 20px;
+}
+
+#selected-year {
+    margin-top: 10px;
+    text-align: center;
+}
+
+#chart-container {
+    width: 48%;
+    margin: 0;
+    padding: 0;
+}
+
+#deathsChart {
+    width: 100%;
+    height: 400px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+@media (max-width: 768px) {
+    #map-container, #chart-container {
+        width: 100%;
+        margin-bottom: 20px;
     }
 }
