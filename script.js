@@ -1,16 +1,16 @@
 document.addEventListener("DOMContentLoaded", function () {
-    // Show the loading spinner
+    
     document.getElementById('loading-spinner').style.display = 'block';
 
     var map = L.map('us-map', {
         maxBounds: [
-            [24.396308, -125.0], // Southwest coordinates of the US
-            [49.384358, -66.93457] // Northeast coordinates of the US
+            [24.396308, -125.0], 
+            [49.384358, -66.93457] 
         ],
-        maxBoundsViscosity: 1.0 // Prevent panning beyond these bounds
+        maxBoundsViscosity: 1.0 
     }).setView([37.8, -96], 4);
 
-    // Add OpenStreetMap tile layer
+    
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         maxZoom: 18,
         attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
@@ -32,23 +32,23 @@ document.addEventListener("DOMContentLoaded", function () {
         "56": "WY"
     };
 
-    var mostImportantFeaturesCurrent = [];  // Store the loaded current features
-    var mostImportantFeaturesForecast = [];  // Store the loaded forecast features
-    var cachedDataCurrent = {}; // Cache for current years' data
-    var cachedDataForecast = {}; // Cache for forecast years' data
+    var mostImportantFeaturesCurrent = [];  
+    var mostImportantFeaturesForecast = [];  
+    var cachedDataCurrent = {}; 
+    var cachedDataForecast = {}; 
 
-    var selectedFeature = null; // Track the currently selected feature in the legend
+    var selectedFeature = null; 
 
-    // Load the most important features data
+    
     Promise.all([
-        fetch('most_important_features_year.json').then(response => response.json()),
-        fetch('most_important_features_year_forecast.json').then(response => response.json())
+        fetch('most_important_features_year2.json').then(response => response.json()),
+        fetch('most_important_features_year_forecast2.json').then(response => response.json())
     ])
         .then(data => {
             mostImportantFeaturesCurrent = [...Object.values(data[0])];
             mostImportantFeaturesForecast = [...Object.values(data[1])];
 
-            // Cache the data by year and county code for current years
+            
             mostImportantFeaturesCurrent.forEach(entry => {
                 const year = entry.year;
                 const countyCode = entry["county code"];
@@ -58,9 +58,9 @@ document.addEventListener("DOMContentLoaded", function () {
                 cachedDataCurrent[year][countyCode] = entry.most_important_feature;
             });
 
-            // Cache the data by year and county code for forecast years
+            
             mostImportantFeaturesForecast.forEach(entry => {
-                const year = entry.year + 2; // Adjust year to match the actual forecast year
+                const year = entry.year + 2; 
                 const countyCode = entry["county code"];
                 if (!cachedDataForecast[year]) {
                     cachedDataForecast[year] = {};
@@ -68,12 +68,12 @@ document.addEventListener("DOMContentLoaded", function () {
                 cachedDataForecast[year][countyCode] = entry.most_important_feature;
             });
 
-            // Now load the GeoJSON
+            
             return fetch('counties.geojson');
         })
         .then(response => response.json())
         .then(data => {
-            counties = data.features;  // Store all county features for search
+            counties = data.features;  
             geojsonLayer = L.geoJSON(data, {
                 style: function (feature) {
                     return getCountyStyle(feature);
@@ -81,39 +81,41 @@ document.addEventListener("DOMContentLoaded", function () {
                 onEachFeature: onEachFeature
             }).addTo(map);
 
-            // Initialize the map with the correct year
+            
             var initialYear = document.getElementById('year-slider').value;
             updateMapColor(initialYear);
 
-            // Hide the loading spinner once the map is fully loaded
+            
             document.getElementById('loading-spinner').style.display = 'none';
 
-            // Call the function to add the legend to the map
+            
             addLegend(map);
 
         })
         .catch(error => {
             console.error('Error loading data:', error);
-            // Hide the spinner if there is an error loading data
+            
             document.getElementById('loading-spinner').style.display = 'none';
         });
 
     function getColorByFeature(feature) {
-        // Predefined colors for specific features
+        
         const featureColors = {
-            "years of potential life lost rate": "#FF0000", // Red
-            "# uninsured_per_1000": "#00FF00", // Green
-            "# associations_per_1000": "#0000FF", // Blue
-            "# some college_per_1000": "#FFFF00",  // Yellow
-            "# injury deaths_per_1000": "#FFA500" // Orange
+            "years of potential life lost rate": "#FF0000",
+            "# uninsured_per_1000": "#00FF00",
+            "# associations_per_1000": "#0000FF",
+            "# some college_per_1000": "#FFFF00",
+            "# injury deaths_per_1000": "#FFA500",
+            "average daily pm2.5": "#A020F0",
+            "# workers who drive alone_per_1000": "#FF00FF"
         };
 
-        // Return the predefined color or a fallback color if the feature is not listed
-        return featureColors[feature] || '#999999';  // Use grey as a fallback color for undefined features
+        
+        return featureColors[feature] || '#999999';  
     }
 
     function getMostImportantFeatureForCounty(countyCode, year) {
-        // Determine whether to use current or forecast data
+        
         if (year <= 2023) {
             return cachedDataCurrent[year] ? cachedDataCurrent[year][countyCode] : null;
         } else {
@@ -164,8 +166,8 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     }
 
-    let activeTooltip = null; // Variable to track the active tooltip
-    let tooltipOpened = false; // Flag to check if the tooltip is opened
+    let activeTooltip = null; 
+    let tooltipOpened = false; 
 
     function onEachFeature(feature, layer) {
         var countyCode = feature.properties.GEOID;
@@ -181,52 +183,52 @@ document.addEventListener("DOMContentLoaded", function () {
                 tooltipContent += "<br>No data available for this year.";
             }
             layer.bindTooltip(tooltipContent, {
-                permanent: false, // The tooltip only appears when hovering
+                permanent: false, 
                 direction: 'auto'
             });
         }
 
         layer.on('mouseover', function () {
             if (activeTooltip) {
-                activeTooltip.closeTooltip(); // Close any existing active tooltip
+                activeTooltip.closeTooltip(); 
             }
-            updateTooltipContent();  // Update the tooltip content on hover
-            layer.openTooltip();  // Show tooltip on hover
-            activeTooltip = layer; // Set the current layer as the active tooltip
-            tooltipOpened = true; // Mark that the tooltip is opened
+            updateTooltipContent();  
+            layer.openTooltip();  
+            activeTooltip = layer; 
+            tooltipOpened = true; 
         });
 
         layer.on('mouseout', function () {
             if (tooltipOpened) {
-                layer.closeTooltip();  // Hide tooltip when not hovering
-                activeTooltip = null; // Clear the active tooltip
-                tooltipOpened = false; // Reset the tooltip flag
+                layer.closeTooltip();  
+                activeTooltip = null; 
+                tooltipOpened = false; 
             }
         });
 
         layer.on('click', function () {
             var currentZoom = map.getZoom();
-            if (currentZoom > 5) {  // Assuming 10 is the zoom threshold
+            if (currentZoom > 5) {  
                 window.location.href = `county_info.html?county=${feature.properties.GEOID}`;
             } else {
                 map.flyToBounds(layer.getBounds(), {
-                    duration: 1.5, // Duration of the zoom animation in seconds
-                    easeLinearity: 0.25 // Control the easing of the animation
+                    duration: 1.5, 
+                    easeLinearity: 0.25 
                 });
             }
         });
     }
 
-    // Close any active tooltip when the map starts moving
+    
     map.on('movestart', function () {
         if (activeTooltip) {
             activeTooltip.closeTooltip();
             activeTooltip = null;
-            tooltipOpened = false; // Reset the tooltip flag
+            tooltipOpened = false; 
         }
     });
 
-    // Debounce function to limit how often the updateMapColor function is called
+    
     function debounce(func, wait) {
         let timeout;
         return function (...args) {
@@ -238,7 +240,7 @@ document.addEventListener("DOMContentLoaded", function () {
     var yearSlider = document.getElementById('year-slider');
     var selectedYearDisplay = document.getElementById('selected-year');
 
-    // Set the initial displayed value to match the slider's initial position
+    
     selectedYearDisplay.textContent = yearSlider.value;
 
     yearSlider.addEventListener('input', debounce(function () {
@@ -246,51 +248,43 @@ document.addEventListener("DOMContentLoaded", function () {
         selectedYearDisplay.textContent = selectedYear;
         updateMapColor(selectedYear);
 
-        // Update the legend content for the new year
+        
         updateLegendContent(document.querySelector('.info.legend'));
-    }, 200)); // Adjust the debounce delay (200ms) as needed
+    }, 200)); 
 
     var initialView = {
         center: [37.8, -96],
         zoom: 4
     };
 
-    // Function to reset the map to its initial state
+    
     function resetMap() {
-        // Fly to the initial view with a shorter duration
+        
         map.flyTo(initialView.center, initialView.zoom, {
-            duration: 1.5, // Shorter duration for quicker response
-            easeLinearity: 0.25 // Slightly smoother easing
+            duration: 0.8, 
+            easeLinearity: 0.25 
         });
 
-        // Use requestAnimationFrame to defer the reset of layers until the map animation completes
-        requestAnimationFrame(() => {
-            selectedFeature = null;
-            geojsonLayer.eachLayer(function (layer) {
-                layer.setStyle({
-                    fillOpacity: 0.6,
-                    opacity: 1,
-                }).bringToFront(); // Show all counties
+        
+        geojsonLayer.eachLayer(function (layer) {
+            layer.setStyle({
+                fillOpacity: 0.6,
+                opacity: 1,
             });
         });
+
+        
+        selectedFeature = null;
     }
 
-    // Debounce function to limit how often the reset function can be triggered
-    function debounce(func, wait) {
-        let timeout;
-        return function (...args) {
-            clearTimeout(timeout);
-            timeout = setTimeout(() => func.apply(this, args), wait);
-        };
-    }
+    
+    document.getElementById('reset-map').addEventListener('click', debounce(resetMap, 150));
 
-    // Handle the reset button click with debounce to prevent multiple triggers
-    document.getElementById('reset-map').addEventListener('click', debounce(resetMap, 300));
 
     var searchInput = document.getElementById('search-input');
     var suggestions = document.getElementById('suggestions');
 
-    // Adjust suggestions dropdown width to match the search bar width
+    
     function adjustSuggestionsWidth() {
         suggestions.style.width = searchInput.offsetWidth + 'px';
     }
@@ -300,7 +294,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     searchInput.addEventListener('input', function () {
         var query = this.value.toLowerCase();
-        suggestions.innerHTML = '';  // Clear previous suggestions
+        suggestions.innerHTML = '';  
         suggestions.style.display = 'none';
 
         if (query.length > 0) {
@@ -317,10 +311,10 @@ document.addEventListener("DOMContentLoaded", function () {
                     item.className = 'list-group-item';
                     item.textContent = match.properties.NAME + ", " + stateAbbr + ' (FIPS: ' + match.properties.GEOID + ')';
                     item.addEventListener('click', function () {
-                        searchInput.value = match.properties.NAME + ", " + stateAbbr;  // Update search box with selected name
-                        suggestions.innerHTML = '';  // Clear suggestions
+                        searchInput.value = match.properties.NAME + ", " + stateAbbr;  
+                        suggestions.innerHTML = '';  
                         suggestions.style.display = 'none';
-                        zoomToFeature(match);  // Zoom to the selected county
+                        zoomToFeature(match);  
                     });
                     suggestions.appendChild(item);
                 });
@@ -332,16 +326,16 @@ document.addEventListener("DOMContentLoaded", function () {
         if (geojsonLayer) {
             geojsonLayer.eachLayer(function (layer) {
                 if (layer.feature.properties.GEOID === feature.properties.GEOID) {
-                    // Fly to the bounds of the selected county
+                    
                     map.flyToBounds(layer.getBounds(), {
-                        duration: 1.5, // Duration of the zoom animation in seconds
-                        easeLinearity: 0.25 // Control the easing of the animation
+                        duration: 1.5, 
+                        easeLinearity: 0.25 
                     });
 
-                    // Open the tooltip after the map zooms in
+                    
                     setTimeout(function () {
                         layer.openTooltip();
-                    }, 1500);  // Delay to allow for zooming, adjusted to match the animation duration
+                    }, 1500);  
                 }
             });
         }
@@ -352,28 +346,28 @@ document.addEventListener("DOMContentLoaded", function () {
 
         legend.onAdd = function (map) {
             var div = L.DomUtil.create('div', 'info legend');
-            updateLegendContent(div); // Update legend content based on the initial year
+            updateLegendContent(div); 
 
-            // Create the info button and append it to the legend div
+            
             var infoButton = L.DomUtil.create('button', 'btn btn-info btn-sm', div);
             infoButton.id = 'info-button';
             infoButton.title = 'Go to Variable Descriptions';
             infoButton.innerHTML = '<i class="fas fa-info-circle"></i>';
-            infoButton.style.marginTop = '10px'; // Add some spacing between legend and button
-            infoButton.style.display = 'block'; // Make sure the button appears as a block element
+            infoButton.style.marginTop = '10px'; 
+            infoButton.style.display = 'block'; 
 
-            // Add click event to scroll to the description section and add glow effect
+            
             infoButton.addEventListener('click', function () {
-                // Scroll to the "Variable Description" section
+                
                 document.getElementById('description-section').scrollIntoView({ behavior: 'smooth' });
 
-                // Get the variable description table
+                
                 var descriptionTable = document.getElementById('variable-description-table');
 
-                // Add the glow effect
+                
                 descriptionTable.classList.add('glow');
 
-                // Remove the glow effect after 2 seconds
+                
                 setTimeout(function () {
                     descriptionTable.classList.remove('glow');
                 }, 2000);
@@ -391,7 +385,7 @@ document.addEventListener("DOMContentLoaded", function () {
         var year = document.getElementById('year-slider').value;
         var features = new Set();
 
-        // Loop through all counties and collect the unique features for the selected year
+        
         geojsonLayer.eachLayer(function (layer) {
             var countyCode = layer.feature.properties.GEOID;
             var mostImportantFeature = getMostImportantFeatureForCounty(countyCode, year);
@@ -400,7 +394,7 @@ document.addEventListener("DOMContentLoaded", function () {
             }
         });
 
-        div.innerHTML = ''; // Clear previous content
+        div.innerHTML = ''; 
 
         features.forEach(function (feature) {
             div.innerHTML +=
@@ -408,7 +402,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 feature + '<br>';
         });
 
-        // Add event listeners to filter map on legend item click
+        
         div.querySelectorAll('i').forEach(function (element, index) {
             element.addEventListener('click', function () {
                 var clickedFeature = Array.from(features)[index];
@@ -419,16 +413,16 @@ document.addEventListener("DOMContentLoaded", function () {
 
     function filterMapByFeature(feature) {
         if (selectedFeature === feature) {
-            // If the feature is already selected, reset the map
+            
             selectedFeature = null;
             geojsonLayer.eachLayer(function (layer) {
                 layer.setStyle({
                     fillOpacity: 0.6,
                     opacity: 1,
-                }).bringToFront(); // Show all counties
+                }).bringToFront(); 
             });
         } else {
-            // Otherwise, filter the map to show only the selected feature
+            
             selectedFeature = feature;
             geojsonLayer.eachLayer(function (layer) {
                 var countyCode = layer.feature.properties.GEOID;
@@ -439,12 +433,12 @@ document.addEventListener("DOMContentLoaded", function () {
                     layer.setStyle({
                         fillOpacity: 0.6,
                         opacity: 1,
-                    }).bringToFront(); // Highlight the selected feature
+                    }).bringToFront(); 
                 } else {
                     layer.setStyle({
                         fillOpacity: 0.1,
                         opacity: 0.1,
-                    }).bringToBack(); // Dim the non-selected features
+                    }).bringToBack(); 
                 }
             });
         }

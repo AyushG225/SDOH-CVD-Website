@@ -1,12 +1,25 @@
 body {
+    background-color: #000;
+    color: #fff;
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
 }
 
 .navbar {
-    margin-bottom: 0;
+    background-color: #333;
+    border-bottom: 2px solid #555;
 }
+
+.navbar-brand,
+.nav-link {
+    color: #fff !important;
+}
+
+.navbar-toggler-icon {
+    filter: invert(1);
+}
+
 
 #content {
     display: flex;
@@ -15,9 +28,12 @@ body {
     padding: 20px;
 }
 
+
 #year-slider {
     width: 100%;
     margin-top: 20px;
+    background-color: #444;
+    cursor: pointer;
 }
 
 #selected-year {
@@ -25,89 +41,26 @@ body {
     text-align: center;
     font-size: 1.2rem;
     font-weight: bold;
+    color: #fff;
 }
+
 
 #chart-container {
     width: 48%;
     margin: 0 auto;
-    /* Center the chart container */
     padding: 0;
     text-align: center;
-    /* Center the chart title */
 }
 
 #deathsChart {
     width: 100%;
     height: 400px;
-    border: 1px solid #ccc;
+    border: 1px solid #555;
     border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+    background-color: #222;
 }
 
-.map-title {
-    text-align: center;
-    font-size: 1.5rem;
-    margin-bottom: 10px;
-    font-weight: bold;
-}
-
-.chart-title {
-    text-align: center;
-    font-size: 1.5rem;
-    margin-bottom: 10px;
-    font-weight: bold;
-}
-
-@media (max-width: 768px) {
-
-    #map-container,
-    #chart-container {
-        width: 100%;
-        margin-bottom: 20px;
-    }
-}
-
-#feature-weights-container {
-    margin-top: 20px;
-    width: 48%;
-    /* Same width as the map */
-    max-height: 300px;
-    /* Adjust the height to make it shorter */
-    overflow-y: auto;
-    /* Enable vertical scrolling if the content exceeds the height */
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-.card-title {
-    font-size: 1.5rem;
-    margin-bottom: 20px;
-    text-align: center;
-}
-
-#feature-weights-table {
-    width: 100%;
-    table-layout: fixed;
-    /* Make columns have equal width */
-}
-
-#feature-weights-table th,
-#feature-weights-table td {
-    padding: 8px 12px;
-    text-align: left;
-    white-space: nowrap;
-    /* Prevent wrapping of text */
-}
-
-#feature-weights-table th {
-    background-color: #f8f9fa;
-    font-weight: bold;
-}
-
-#feature-weights-table tr:nth-child(even) {
-    background-color: #f2f2f2;
-}
 
 #map-container {
     width: 48%;
@@ -117,34 +70,73 @@ body {
     flex-direction: column;
     align-items: center;
     position: relative;
-    /* Keep the map container relative */
 }
 
 #county-map {
     width: 100%;
     height: 400px;
-    border: 1px solid #ccc;
+    border: 1px solid #555;
     border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    position: relative;
-    /* Ensure the legend is positioned relative to the map itself */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
 }
+
+
+#feature-weights-container {
+    margin-top: 20px;
+    width: 48%;
+    max-height: 300px;
+    overflow-y: auto;
+    border: 1px solid #555;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+    background-color: #111;
+    color: #ddd;
+}
+
+.card-title {
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+    text-align: center;
+    color: #fff;
+}
+
+
+#feature-weights-table {
+    width: 100%;
+    table-layout: fixed;
+    color: #ddd;
+    background-color: #111;
+}
+
+#feature-weights-table th,
+#feature-weights-table td {
+    padding: 8px 12px;
+    text-align: left;
+    white-space: nowrap;
+}
+
+#feature-weights-table th {
+    background-color: #333;
+    font-weight: bold;
+}
+
+#feature-weights-table tr:nth-child(even) {
+    background-color: #222;
+}
+
 
 #legend-container {
     position: absolute;
-    /* Position the legend absolutely within the county-map div */
     top: 10px;
-    /* Position it inside the map */
     right: 10px;
-    /* Position it inside the map */
-    background-color: white;
+    background-color: #111;
     padding: 10px;
     border-radius: 5px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
     font-size: 0.9rem;
     line-height: 1.4;
     z-index: 1000;
-    /* Ensure the legend is on top of other map elements */
+    color: #fff;
 }
 
 #legend-container i {
@@ -153,8 +145,9 @@ body {
     height: 18px;
     margin-right: 8px;
     vertical-align: middle;
-    background-color: #ccc;
+    background-color: #444;
 }
+
 
 .info-button {
     background: none;
@@ -169,6 +162,7 @@ body {
     color: #0056b3;
 }
 
+
 .info-modal {
     display: none;
     position: fixed;
@@ -178,18 +172,29 @@ body {
     width: 100%;
     height: 100%;
     overflow: auto;
-    background-color: rgba(0, 0, 0, 0.5);
+    background-color: rgba(0, 0, 0, 0.8);
 }
 
 .info-modal-content {
-    background-color: #fff;
-    margin: 15% auto;
+    background-color: #111;
+    margin: 5% auto;
     padding: 20px;
-    border: 1px solid #888;
+    border: 1px solid #555;
     width: 80%;
-    max-width: 500px;
-    box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.3);
+    max-width: 900px;
+    max-height: 80vh;
+    box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.5);
     border-radius: 8px;
+    overflow-y: auto;
+    color: #ddd;
+}
+
+@media (max-width: 768px) {
+    .info-modal-content {
+        width: 95%;
+        max-width: 100%;
+        height: 90vh;
+    }
 }
 
 .close-modal {
@@ -202,7 +207,12 @@ body {
 
 .close-modal:hover,
 .close-modal:focus {
-    color: #000;
+    color: #fff;
     text-decoration: none;
     cursor: pointer;
+}
+
+.glow {
+    box-shadow: 0 0 20px rgba(255, 255, 0, 0.8);
+    transition: box-shadow 0.5s ease-in-out;
 }

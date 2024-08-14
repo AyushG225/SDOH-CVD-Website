@@ -1,18 +1,24 @@
-let cachedMostImportantFeatures = {}; // Cache to store most important features for each county and year
+let cachedMostImportantFeatures = {};
 
 document.addEventListener("DOMContentLoaded", function () {
     const mapInfoButton = document.getElementById('map-info-button');
     const chartInfoButton = document.getElementById('chart-info-button');
     const weightsInfoButton = document.getElementById('weights-info-button');
 
-    const mapModal = document.getElementById('map-info-modal');
+    const mapInfoModal = document.getElementById('map-info-modal');
+    const mapModalContent = mapInfoModal.querySelector('.info-modal-content');
+
+    const weightsInfoModal = document.getElementById('weights-info-modal');
+    const weightsModalContent = weightsInfoModal.querySelector('.info-modal-content');
+
     const chartModal = document.getElementById('chart-info-modal');
     const weightsModal = document.getElementById('weights-info-modal');
 
     const closeButtons = document.querySelectorAll('.close-modal');
 
     mapInfoButton.addEventListener('click', function () {
-        mapModal.style.display = 'block';
+        adjustModalSize(mapModalContent);
+        mapInfoModal.style.display = 'block';
     });
 
     chartInfoButton.addEventListener('click', function () {
@@ -20,6 +26,7 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
     weightsInfoButton.addEventListener('click', function () {
+        adjustModalSize(weightsModalContent);
         weightsModal.style.display = 'block';
     });
 
@@ -73,22 +80,22 @@ document.addEventListener("DOMContentLoaded", function () {
                 }).addTo(map);
 
                 map.fitBounds(geoJsonLayer.getBounds());
-                
-                // Cache feature weights and initialize the slider, map, legend, and chart
+
+
                 cacheAllFeatureWeights(countyGEOID).then(() => {
                     initializeSliderAndMap(countyGEOID, geoJsonLayer);
 
-                    // Add the county color and legend after initial load
+
                     const mostImportantFeature = cachedMostImportantFeatures[countyGEOID][2015].mostImportantFeature;
                     updateCountyColor(geoJsonLayer, mostImportantFeature);
                     displayFeatureWeights(cachedMostImportantFeatures[countyGEOID][2015].important_features);
-                    addLegend(map, geoJsonLayer); // Add legend to the map
+                    addLegend(map, geoJsonLayer);
 
-                    // Ensure the hover functionality is added after the map and layers are set up
-                    addHoverInfo(geoJsonLayer, countyGEOID); // *** Add this line to initialize hover ***
 
-                    // Ensure the chart is loaded after data is ready
-                    loadAndCreateChart(countyGEOID); // Load and create the chart
+                    addHoverInfo(geoJsonLayer, countyGEOID);
+
+
+                    loadAndCreateChart(countyGEOID);
                 });
             } else {
                 document.getElementById('county-name').textContent = "County Not Found";
@@ -101,7 +108,7 @@ document.addEventListener("DOMContentLoaded", function () {
             document.getElementById('county-description').textContent = "Failed to load county data.";
         });
 
-    const yearSlider = document.getElementById('year-slider'); 
+    const yearSlider = document.getElementById('year-slider');
     yearSlider.addEventListener('input', function () {
         const selectedYear = parseInt(this.value);
         document.getElementById('selected-year').textContent = selectedYear;
@@ -109,14 +116,32 @@ document.addEventListener("DOMContentLoaded", function () {
         const mostImportantFeature = cachedMostImportantFeatures[countyGEOID][selectedYear].mostImportantFeature;
         updateCountyColor(geoJsonLayer, mostImportantFeature);
         displayFeatureWeights(cachedMostImportantFeatures[countyGEOID][selectedYear].important_features);
-        
-        updateLegendContent(document.getElementById('legend-container'), geoJsonLayer); // Update the legend content
+
+        updateLegendContent(document.getElementById('legend-container'), geoJsonLayer);
     });
 });
 
+function adjustModalSize(modalContent) {
+    const contentHeight = modalContent.scrollHeight;
+    const windowHeight = window.innerHeight;
+
+    if (contentHeight > windowHeight * 0.8) {
+        modalContent.style.height = '80vh';
+    } else {
+        modalContent.style.height = 'auto';
+    }
+
+    const contentWidth = modalContent.scrollWidth;
+    if (contentWidth > 900) {
+        modalContent.style.width = '90%';
+    } else {
+        modalContent.style.width = '80%';
+    }
+}
+
 function cacheAllFeatureWeights(countyGEOID) {
     return new Promise((resolve, reject) => {
-        const years = [...Array(11).keys()].map(i => i + 2015); // [2015, 2016, ..., 2025]
+        const years = [...Array(11).keys()].map(i => i + 2015);
 
         Promise.all([
             fetch('SDOH+HeartData2.json').then(response => response.json()),
@@ -135,7 +160,7 @@ function cacheAllFeatureWeights(countyGEOID) {
                 cachedMostImportantFeatures[countyGEOID][year] = { mostImportantFeature, important_features: importantFeatures };
             });
 
-            resolve(); // Resolve the promise after caching is complete
+            resolve();
         }).catch(error => {
             console.error('Error caching most important features:', error);
             reject(error);
@@ -160,7 +185,7 @@ function calculateMostImportantFeature(countyData, percentileData, year, countyC
         const feature = featureImportances[key].Feature;
         const importance = featureImportances[key].Importance;
 
-        // Skip the "year" feature and only include features that exist in percentileYearData
+
         if (feature !== 'year' && percentileYearData.hasOwnProperty(feature)) {
             let featureVal = percentileYearData[feature];
             if (flipRankMapping[feature] === 1) {
@@ -184,14 +209,14 @@ function calculateMostImportantFeature(countyData, percentileData, year, countyC
 
 function initializeSliderAndMap(countyGEOID, geoJsonLayer) {
     const yearSlider = document.getElementById('year-slider');
-    yearSlider.value = 2015; // Reset the slider to 2015
+    yearSlider.value = 2015;
     document.getElementById('selected-year').textContent = 2015;
 
-    // Immediately update the map color after caching the feature weights
+
     cacheAllFeatureWeights(countyGEOID).then(() => {
         const mostImportantFeature = cachedMostImportantFeatures[countyGEOID][2015].mostImportantFeature;
-        updateCountyColor(geoJsonLayer, mostImportantFeature); // Update color based on the initial year (2015)
-        displayFeatureWeights(cachedMostImportantFeatures[countyGEOID][2015].important_features); // Initial display for the default year 2015
+        updateCountyColor(geoJsonLayer, mostImportantFeature);
+        displayFeatureWeights(cachedMostImportantFeatures[countyGEOID][2015].important_features);
     });
 
     yearSlider.addEventListener('input', function () {
@@ -221,7 +246,9 @@ function getColorByFeature(feature) {
         "# uninsured_per_1000": "#00FF00",
         "# associations_per_1000": "#0000FF",
         "# some college_per_1000": "#FFFF00",
-        "# injury deaths_per_1000": "#FFA500"
+        "# injury deaths_per_1000": "#FFA500",
+        "average daily pm2.5": "#A020F0",
+        "# workers who drive alone_per_1000": "#FF00FF"
     };
 
     return featureColors[feature] || '#999999';
@@ -229,16 +256,16 @@ function getColorByFeature(feature) {
 
 function displayFeatureWeights(importantFeatures) {
     const featureWeightsList = document.getElementById('feature-weights-list');
-    featureWeightsList.innerHTML = ''; // Clear existing list
+    featureWeightsList.innerHTML = '';
 
-    // Only display the top 5 features
+
     importantFeatures.slice(0, 5).forEach(item => {
         const row = document.createElement('tr');
         const featureCell = document.createElement('td');
         const weightCell = document.createElement('td');
 
         featureCell.textContent = item.Feature;
-        weightCell.textContent = item.Weight.toFixed(2);
+        weightCell.textContent = item.Weight.toFixed(4);
 
         row.appendChild(featureCell);
         row.appendChild(weightCell);
@@ -284,6 +311,13 @@ function loadAndCreateChart(countyGEOID) {
         });
 
         const ctx = document.getElementById('deathsChart').getContext('2d');
+
+
+        const maxDataValue = Math.max(...currentDataArray, ...forecastDataArray);
+
+
+        const yAxisMax = maxDataValue > 5 ? Math.ceil(maxDataValue) : 5;
+
         new Chart(ctx, {
             type: 'line',
             data: {
@@ -292,17 +326,15 @@ function loadAndCreateChart(countyGEOID) {
                     label: 'Deaths per 1000 (Current)',
                     data: currentDataArray,
                     borderColor: 'rgba(75, 192, 192, 1)',
-                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                    backgroundColor: 'rgba(75, 192, 192, 0.1)',
                     fill: false,
-                    spanGaps: false
                 }, {
                     label: 'Deaths per 1000 (Forecast)',
                     data: forecastDataArray,
                     borderColor: 'rgba(255, 99, 132, 1)',
-                    backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                    backgroundColor: 'rgba(255, 99, 132, 0.1)',
                     fill: false,
-                    spanGaps: true,
-                    borderDash: [5, 5]
+                    borderDash: [5, 5],
                 }]
             },
             options: {
@@ -310,21 +342,52 @@ function loadAndCreateChart(countyGEOID) {
                     x: {
                         title: {
                             display: true,
-                            text: 'Year'
+                            text: 'Year',
+                            color: '#ddd'
+                        },
+                        ticks: {
+                            color: '#ddd'
+                        },
+                        grid: {
+                            color: '#555'
                         }
                     },
                     y: {
                         title: {
                             display: true,
-                            text: 'Deaths per 1000'
+                            text: 'Deaths per 1000',
+                            color: '#ddd'
+                        },
+                        ticks: {
+                            color: '#ddd'
+                        },
+                        grid: {
+                            color: '#555'
                         },
                         beginAtZero: true,
-                        min: 0,  // Set the minimum value for the y-axis
-                        max: 5  // Set the maximum value for the y-axis, adjust this based on what's comparable across counties
+                        max: yAxisMax,
+                    }
+                },
+                plugins: {
+                    legend: {
+                        labels: {
+                            color: '#ddd'
+                        }
+                    }
+                },
+                layout: {
+                    padding: {
+                        left: 10,
+                        right: 10,
+                        top: 20,
+                        bottom: 20
                     }
                 }
             }
         });
+
+
+
 
     }).catch(error => {
         console.error('Error loading deaths data:', error);
@@ -394,7 +457,7 @@ const flipRankMapping = {
     'deaths_per_1000': -1,
     '# workers who drive alone_per_1000': -1,
     '# uninsured_per_1000': -1,
-    '# associations_per_1000': 1,
+    '# associations_per_1000': -1,
     '# unemployed_per_1000': -1,
     '# dentists_per_1000': 1,
     '# injury deaths_per_1000': -1,
@@ -432,7 +495,7 @@ function updateLegendContent(container, geoJsonLayer) {
     const year = document.getElementById('year-slider').value;
     const features = new Set();
 
-    // Collect unique features for the selected year
+
     geoJsonLayer.eachLayer(function (layer) {
         const countyCode = layer.feature.properties.GEOID;
         const mostImportantFeature = cachedMostImportantFeatures[countyCode] && cachedMostImportantFeatures[countyCode][year]
@@ -443,7 +506,7 @@ function updateLegendContent(container, geoJsonLayer) {
         }
     });
 
-    container.innerHTML = ''; // Clear previous content
+    container.innerHTML = '';
 
     features.forEach(function (feature) {
         container.innerHTML +=
@@ -454,7 +517,7 @@ function updateLegendContent(container, geoJsonLayer) {
 
 document.getElementById('generate-report').addEventListener('click', function () {
     const { jsPDF } = window.jspdf;
-    const countyGEOID = new URLSearchParams(window.location.search).get('county'); // Capture the countyGEOID
+    const countyGEOID = new URLSearchParams(window.location.search).get('county');
 
     if (!countyGEOID) {
         console.error('County GEOID is not defined');
@@ -467,25 +530,25 @@ document.getElementById('generate-report').addEventListener('click', function ()
     let y = 10;
     const margin = 10;
 
-    // Add county name and description
+
     const countyName = document.getElementById('county-name').textContent;
     const countyDescription = document.getElementById('county-description').textContent;
-    doc.setFontSize(14);  // Reduced font size for compact layout
+    doc.setFontSize(14);
     doc.text(countyName, margin, y);
     y += 8;
-    doc.setFontSize(10);  // Reduced font size for compact layout
+    doc.setFontSize(10);
     doc.text(countyDescription, margin, y);
     y += 8;
 
-    // Add the most important features over the years with their weights
+
     const years = Object.keys(cachedMostImportantFeatures[countyGEOID]);
     let tableY = y + 5;
 
-    doc.setFontSize(12);  // Reduced font size for compact layout
+    doc.setFontSize(12);
     doc.text('Most Important Features Over the Years', margin, tableY);
     tableY += 7;
 
-    const maxFeaturesPerYear = 3; // Display fewer features for compact layout
+    const maxFeaturesPerYear = 3;
 
     years.forEach(year => {
         const yearData = cachedMostImportantFeatures[countyGEOID][year];
@@ -499,14 +562,14 @@ document.getElementById('generate-report').addEventListener('click', function ()
         tableY += 3;
     });
 
-    // Create a temporary container for the map
+
     const tempMapContainer = document.createElement('div');
     tempMapContainer.id = 'temp-county-map';
     tempMapContainer.style.width = '300px';
     tempMapContainer.style.height = '200px';
     document.body.appendChild(tempMapContainer);
 
-    // Initialize the map in the temporary container
+
     const tempMap = L.map(tempMapContainer, {
         dragging: false,
         scrollWheelZoom: false,
@@ -521,7 +584,7 @@ document.getElementById('generate-report').addEventListener('click', function ()
             const county = data.features.find(f => f.properties.GEOID === countyGEOID);
             if (county) {
                 const geoJsonLayer = L.geoJSON(county).addTo(tempMap);
-                tempMap.fitBounds(geoJsonLayer.getBounds(), { padding: [10, 10] }); // Centered and zoomed out to fit the county
+                tempMap.fitBounds(geoJsonLayer.getBounds(), { padding: [10, 10] });
 
                 setTimeout(() => {
                     html2canvas(tempMapContainer).then(function (canvas) {
@@ -529,30 +592,30 @@ document.getElementById('generate-report').addEventListener('click', function ()
                         const mapWidth = pageWidth / 4;
                         const mapHeight = canvas.height * (mapWidth / canvas.width);
 
-                        // Add the small map image
+
                         doc.addImage(imgData, 'PNG', pageWidth - mapWidth - margin, margin, mapWidth, mapHeight);
 
-                        // Add the line chart
+
                         html2canvas(document.getElementById('deathsChart')).then(function (canvas) {
                             const chartData = canvas.toDataURL('image/png');
                             const chartWidth = pageWidth - 2 * margin;
                             const chartHeight = canvas.height * (chartWidth / canvas.width);
 
-                            // Adjust positioning to fit everything on one page
+
                             const remainingHeight = pageHeight - (tableY + mapHeight + 10);
                             const chartY = tableY + mapHeight + 10 + Math.max(0, remainingHeight - chartHeight);
 
                             doc.addImage(chartData, 'PNG', margin, chartY, chartWidth, chartHeight);
 
-                            // Finalize and save the PDF
+
                             doc.save(`${countyName}_Report.pdf`);
 
-                            // Remove the temporary map container
+
                             tempMap.remove();
                             document.body.removeChild(tempMapContainer);
                         });
                     });
-                }, 1000); // Adding a small delay to ensure the map is properly rendered
+                }, 1000);
             }
         })
         .catch(error => {

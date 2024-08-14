@@ -3,27 +3,27 @@ body {
     margin: 0;
     padding: 0;
     background-color: #000;
-    /* Black background */
+   
     color: #fff;
-    /* White text */
+   
 }
 
 .navbar {
     background-color: #333;
-    /* Dark gray for the navbar */
+   
     border-bottom: 2px solid #555;
-    /* Slightly lighter border */
+   
 }
 
 .navbar-brand,
 .nav-link {
     color: #fff !important;
-    /* White text */
+   
 }
 
 .navbar-toggler-icon {
     filter: invert(1);
-    /* White icon */
+   
 }
 
 .search-bar-container {
@@ -32,7 +32,7 @@ body {
     display: flex;
     justify-content: center;
     background-color: #222;
-    /* Dark gray background */
+   
     position: relative;
     z-index: 1001;
 }
@@ -45,16 +45,16 @@ body {
     z-index: 1002;
     padding-right: 10px;
     background-color: #fff;
-    /* White background */
+   
     color: #000;
-    /* Black text */
+   
 }
 
 #suggestions {
     background: #333;
-    /* Dark gray for suggestion box */
+   
     border: 1px solid #555;
-    /* Slightly lighter border */
+   
     margin-top: 40px;
     border-radius: 0 0 10px 10px;
     box-shadow: 0 4px 8px rgba(255, 255, 255, 0.1);
@@ -68,14 +68,14 @@ body {
     cursor: pointer;
     padding: 10px 15px;
     color: #fff;
-    /* White text */
+   
     background-color: #333;
-    /* Dark gray background */
+   
 }
 
 #suggestions .list-group-item:hover {
     background-color: #555;
-    /* Lighter gray on hover */
+   
 }
 
 .map-container {
@@ -83,17 +83,43 @@ body {
     display: flex;
     justify-content: center;
     background-color: #000;
-    /* Black background */
+   
     position: relative;
+    width: 100%;
 }
 
 #us-map {
-    width: 100%;
+    width: 90%;
+    max-width: 1700px;
     height: 75vh;
     position: relative;
     border: 2px solid #555;
-    /* Dark gray border around the map */
+   
     border-radius: 10px;
+    margin: 0 auto;
+}
+
+#reset-map {
+    position: absolute;
+    top: 75px;
+    left: 12px;
+    width: 30px;
+    height: 30px;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    cursor: pointer;
+    z-index: 1003;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 1px 5px rgba(0,0,0,0.65);
+}
+
+#reset-map i {
+    color: #000;
+    font-size: 16px;
+    line-height: 1;
 }
 
 .year-slider-container {
@@ -101,11 +127,12 @@ body {
     bottom: 10px;
     left: 50%;
     transform: translateX(-50%);
-    width: 80%;
+    width: 100%;
+    max-width: 1200px;
     text-align: center;
     z-index: 1002;
     background: rgba(255, 255, 255, 0.1);
-    /* Semi-transparent white */
+   
     padding: 10px;
     border-radius: 10px;
 }
@@ -144,7 +171,7 @@ body {
     cursor: pointer;
 }
 
-/* Style for tickmarks */
+
 #tickmarks option {
     background-color: transparent;
 }
@@ -241,7 +268,7 @@ body {
     font-size: 18px;
     margin-top: 10px;
     color: #fff;
-    /* White text */
+   
 }
 
 .scroll-down-indicator {
@@ -250,38 +277,38 @@ body {
     line-height: 50px;
     cursor: pointer;
     color: #fff;
-    /* White icon */
+   
 }
 
 .scroll-down-indicator a {
     font-size: 32px;
     color: #fff;
-    /* White arrow */
+   
     text-decoration: none;
     transition: color 0.3s ease;
 }
 
 .scroll-down-indicator:hover a {
     color: #aaa;
-    /* Lighter gray on hover */
+   
 }
 
 .description-container {
     padding: 30px 0;
     background-color: #111;
-    /* Very dark gray background */
+   
 }
 
 .description-container .text-left {
     text-align: left;
-    /* Align text to the left */
+   
     color: #ddd;
-    /* Light gray text */
+   
 }
 
 .description-container h2, .description-container h3 {
     color: #fff;
-    /* White text for headings */
+   
 }
 
 .description-container p {
@@ -291,7 +318,7 @@ body {
 
 .description-container .table {
     margin-top: 20px;
-    /* Add space between the table and the text */
+   
 }
 
 input[type="range"] {
@@ -307,7 +334,7 @@ input[type="range"]::-webkit-slider-runnable-track {
     cursor: pointer;
     box-shadow: 1.0px 1.0px 1.0px #000000;
     background: #444;
-    /* Dark gray track */
+   
     border-radius: 1.3px;
     border: 0.2px solid #010101;
 }
@@ -318,7 +345,7 @@ input[type="range"]::-webkit-slider-thumb {
     width: 16px;
     border-radius: 3px;
     background: #fff;
-    /* White thumb */
+   
     cursor: pointer;
     -webkit-appearance: none;
     margin-top: -14px;
@@ -334,7 +361,7 @@ input[type="range"]::-moz-range-track {
     cursor: pointer;
     box-shadow: 1.0px 1.0px 1.0px #000;
     background: #444;
-    /* Dark gray track */
+   
     border-radius: 1.3px;
     border: 0.2px solid #010101;
 }
@@ -345,7 +372,7 @@ input[type="range"]::-moz-range-thumb {
     width: 16px;
     border-radius: 3px;
     background: #fff;
-    /* White thumb */
+   
     cursor: pointer;
 }
 
@@ -361,7 +388,7 @@ input[type="range"]::-ms-track {
 
 input[type="range"]::-ms-fill-lower {
     background: #444;
-    /* Dark gray fill */
+   
     border: 0.2px solid #010101;
     border-radius: 2.6px;
     box-shadow: 1.0px 1.0px 1.0px #000;
@@ -369,7 +396,7 @@ input[type="range"]::-ms-fill-lower {
 
 input[type="range"]::-ms-fill-upper {
     background: #444;
-    /* Dark gray fill */
+   
     border: 0.2px solid #010101;
     border-radius: 2.6px;
     box-shadow: 1.0px 1.0px 1.0px #000;
@@ -381,22 +408,22 @@ input[type="range"]::-ms-thumb {
     width: 16px;
     border-radius: 3px;
     background: #fff;
-    /* White thumb */
+   
     cursor: pointer;
     height: 8.4px;
 }
 
 input[type="range"]:focus::-ms-fill-lower {
     background: #444;
-    /* Dark gray fill */
+   
 }
 
 input[type="range"]:focus::-ms-fill-upper {
     background: #444;
-    /* Dark gray fill */
+   
 }
 
-/* Loading spinner styles */
+
 #loading-spinner {
     position: absolute;
     top: 50%;
@@ -410,7 +437,7 @@ input[type="range"]:focus::-ms-fill-upper {
     animation: spin 2s linear infinite;
     z-index: 1000;
     display: none;
-    /* Initially hidden */
+   
 }
 
 @keyframes spin {
@@ -423,14 +450,14 @@ input[type="range"]:focus::-ms-fill-upper {
     }
 }
 
-/* Make sure the map container covers the entire space and sits below the spinner */
+
 #map-container {
     position: relative;
     width: 100%;
     height: 100%;
 }
 
-/* Legend container */
+
 .info.legend {
     background: #fff;
     padding: 10px;
@@ -441,7 +468,7 @@ input[type="range"]:focus::-ms-fill-upper {
     font-size: 14px;
 }
 
-/* Legend color box */
+
 .info.legend i {
     width: 18px;
     height: 18px;
@@ -466,7 +493,7 @@ input[type="range"]:focus::-ms-fill-upper {
 }
 
 .glow {
-    box-shadow: 0 0 20px rgba(255, 255, 0, 0.8); /* Yellow glowing effect */
+    box-shadow: 0 0 20px rgba(255, 255, 0, 0.8);
     transition: box-shadow 0.5s ease-in-out;
 }
 
@@ -474,39 +501,15 @@ input[type="range"]:focus::-ms-fill-upper {
     text-align: center;
     padding: 20px 0;
     background-color: #111;
-    /* Dark background color */
+   
     color: #fff;
-    /* White text color */
+   
     border-bottom: 2px solid #555;
-    /* Bottom border */
+   
 }
 
 .map-title {
     margin: 0;
     font-size: 24px;
     font-weight: bold;
-}
-
-#reset-map {
-    position: absolute;
-    left: 14px; /* Align with the left side of the zoom controls */
-    top: 80px; /* Adjust to position directly below the minus button */
-    width: 30px; /* Match the width of the Leaflet zoom controls */
-    height: 30px; /* Match the height of the Leaflet zoom controls */
-    background-color: #fff;
-    border: 1px solid #ccc;
-    border-top: none; /* Remove the top border to merge with the minus button */
-    border-radius: 0 0 4px 4px; /* Round only the bottom corners */
-    cursor: pointer;
-    z-index: 1003;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: 0 1px 5px rgba(0,0,0,0.65); /* Match the shadow of Leaflet controls */
-}
-
-#reset-map i {
-    color: #000;
-    font-size: 16px; /* Match the icon size to zoom control icons */
-    line-height: 1;
 }

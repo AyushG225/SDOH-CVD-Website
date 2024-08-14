@@ -5,24 +5,24 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>County Information</title>
-  <!-- Bootstrap CSS -->
+
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-  <!-- Leaflet CSS -->
+
   <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
-  <!-- Custom CSS -->
+
   <link rel="stylesheet" href="county_styles.css">
-  <!-- Chart.js -->
+
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <!-- jsPDF and html2canvas -->
+
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 </head>
 
 <body>
-  <!-- Navigation Bar -->
+
   <nav class="navbar navbar-expand-lg">
     <div class="container-fluid">
-      <a class="navbar-brand" href="#">Social Determinants of Health + Cardiovascular Disease</a>
+      <a class="navbar-brand" href="index.html">Social Determinants of Health + Cardiovascular Disease</a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
         aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
@@ -33,16 +33,16 @@
             <a class="nav-link active" aria-current="page" href="index.html">Home</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#">About</a>
+            <a class="nav-link" href="about.html">About</a>
           </li>
         </ul>
       </div>
     </div>
   </nav>
 
-  <!-- Content Section -->
+
   <div id="content">
-    <!-- Map Container -->
+
     <div id="map-container">
       <h1 id="county-name">Loading...</h1>
       <p id="county-description">Please wait while we load the county information.</p>
@@ -50,14 +50,14 @@
         <button id="map-info-button" class="info-button" title="More information">ℹ️</button>
       </h3>
       <div id="county-map">
-        <!-- Legend container placed inside the county-map div -->
+
         <div id="legend-container" class="legend"></div>
       </div>
       <input type="range" id="year-slider" min="2015" max="2025" value="2015" step="1" class="form-range">
       <div id="selected-year" class="text-center fw-bold">2015</div>
     </div>
 
-    <!-- Chart Container -->
+
     <div id="chart-container">
       <h3 class="chart-title">Cardiovascular Disease Death Rate Over Time
         <button id="chart-info-button" class="info-button" title="More information">ℹ️</button>
@@ -65,36 +65,193 @@
       <canvas id="deathsChart"></canvas>
     </div>
 
-    <!-- Feature Weights Container -->
+
     <div id="feature-weights-container" class="card">
       <div class="card-body">
         <h3 class="card-title">Feature Weights
           <button id="weights-info-button" class="info-button" title="More information">ℹ️</button>
         </h3>
         <table id="feature-weights-table" class="table table-sm table-striped">
-          <thead class="table-light">
+          <thead class="table-dark">
             <tr>
               <th>Feature</th>
               <th>Weight</th>
             </tr>
           </thead>
           <tbody id="feature-weights-list">
-            <!-- Feature weights will be populated here -->
+
           </tbody>
         </table>
       </div>
     </div>
 
-    <!-- Map Info Modal -->
+
     <div id="map-info-modal" class="info-modal">
       <div class="info-modal-content">
         <span class="close-modal">&times;</span>
         <h4>Most Important Variable Information</h4>
         <p>This map shows the most important variable for the selected county and year.</p>
+
+
+        <h5>Variable Description</h5>
+        <table id="variable-description-table" class="table table-dark table-striped">
+          <thead>
+            <tr>
+              <th scope="col">Variable</th>
+              <th scope="col">Description</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td># associations_per_1000</td>
+              <td>The number of social, civic, and religious associations per 1,000 population, indicating levels of
+                community engagement and social capital.</td>
+            </tr>
+            <tr>
+              <td># chlamydia cases_per_1000</td>
+              <td>The number of reported chlamydia cases per 1,000 population, indicating the prevalence of this
+                sexually transmitted infection.</td>
+            </tr>
+            <tr>
+              <td># dentists_per_1000</td>
+              <td>The number of dentists per 1,000 population, indicating the availability of dental care in the
+                community.</td>
+            </tr>
+            <tr>
+              <td># driving deaths_per_1000</td>
+              <td>The number of deaths resulting from motor vehicle accidents per 1,000 population.</td>
+            </tr>
+            <tr>
+              <td># injury deaths_per_1000</td>
+              <td>The number of deaths due to injuries per 1,000 population, a measure of fatal injuries in the
+                community.</td>
+            </tr>
+            <tr>
+              <td># primary care physicians_per_1000</td>
+              <td>The number of primary care physicians per 1,000 population, reflecting access to basic healthcare
+                services.</td>
+            </tr>
+            <tr>
+              <td># some college_per_1000</td>
+              <td>The number of people per 1,000 population who have attended some college but have not earned a
+                degree, indicating educational attainment in the community.</td>
+            </tr>
+            <tr>
+              <td># uninsured_per_1000</td>
+              <td>The number of people per 1,000 population who lack health insurance, reflecting access to healthcare
+                coverage.</td>
+            </tr>
+            <tr>
+              <td># unemployed_per_1000</td>
+              <td>The number of unemployed individuals per 1,000 population, reflecting economic conditions and job
+                availability.</td>
+            </tr>
+            <tr>
+              <td># workers who drive alone_per_1000</td>
+              <td>The number of workers per 1,000 population who commute alone by car, indicating commuting patterns
+                and reliance on private vehicles.</td>
+            </tr>
+            <tr>
+              <td>% children in poverty</td>
+              <td>The percentage of children under 18 living in households with incomes below the poverty line,
+                reflecting socioeconomic conditions that can impact health and well-being.</td>
+            </tr>
+            <tr>
+              <td>% long commute - drives alone</td>
+              <td>The percentage of workers who drive alone for 30 minutes or more to work, which can impact physical
+                activity levels and contribute to stress.</td>
+            </tr>
+            <tr>
+              <td>% physically inactive</td>
+              <td>The percentage of adults who report no physical activity during their leisure time, a risk factor
+                for various chronic diseases.</td>
+            </tr>
+            <tr>
+              <td>% severe housing problems</td>
+              <td>The percentage of households facing severe housing issues, including overcrowding, high housing
+                costs relative to income, or lack of basic amenities like plumbing or kitchen facilities.</td>
+            </tr>
+            <tr>
+              <td>% some college</td>
+              <td>The percentage of adults aged 25-44 who have attended some college but have not earned a degree,
+                indicating educational attainment.</td>
+            </tr>
+            <tr>
+              <td>% unemployed</td>
+              <td>The percentage of the labor force that is unemployed, an indicator of economic health and stability.
+              </td>
+            </tr>
+            <tr>
+              <td>% uninsured</td>
+              <td>The percentage of the population without health insurance coverage, which can limit access to
+                healthcare services and contribute to poor health outcomes.</td>
+            </tr>
+            <tr>
+              <td>20th percentile income</td>
+              <td>The income level below which 20% of the population falls, often used to assess the income levels of
+                the lower end of the economic spectrum.</td>
+            </tr>
+            <tr>
+              <td>80th percentile income</td>
+              <td>The income level below which 80% of the population falls, indicating the higher end of the income
+                distribution in a community.</td>
+            </tr>
+            <tr>
+              <td>average daily pm2.5</td>
+              <td>The average daily concentration of fine particulate matter (PM2.5) in the air, which is linked to
+                respiratory and cardiovascular health issues.</td>
+            </tr>
+            <tr>
+              <td>chlamydia rate</td>
+              <td>The rate of chlamydia infections per population, indicating the prevalence of this common sexually
+                transmitted infection in a community.</td>
+            </tr>
+            <tr>
+              <td>dentist rate</td>
+              <td>The number of dentists per population, reflecting the availability of dental care services in a
+                community.</td>
+            </tr>
+            <tr>
+              <td>food environment index</td>
+              <td>A composite measure of factors that contribute to a healthy food environment, including access to
+                healthy foods and food security.</td>
+            </tr>
+            <tr>
+              <td>income ratio</td>
+              <td>The ratio of income at the 80th percentile to income at the 20th percentile, used to assess income
+                inequality within a population.</td>
+            </tr>
+            <tr>
+              <td>injury death rate</td>
+              <td>The rate of deaths caused by injuries per population, including those from accidents, violence, and
+                other external causes.</td>
+            <tr>
+              <td>labor force</td>
+              <td>The total number of people aged 16 and over who are either employed or actively seeking employment,
+                reflecting the economic activity of a population.</td>
+            </tr>
+            <tr>
+              <td>population</td>
+              <td>The total number of people living in a given area, used as a basic measure of population size and
+                density.</td>
+            </tr>
+            <tr>
+              <td>teen birth rate</td>
+              <td>The number of live births per 1,000 females aged 15-19, used to assess adolescent reproductive
+                health and related social factors.</td>
+            </tr>
+            <tr>
+              <td>years of potential life lost rate</td>
+              <td>A measure of premature mortality that quantifies the years of life lost due to death before a
+                certain age, often used to assess the impact of early death on a population.</td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     </div>
 
-    <!-- Chart Info Modal -->
+
+
     <div id="chart-info-modal" class="info-modal">
       <div class="info-modal-content">
         <span class="close-modal">&times;</span>
@@ -108,7 +265,7 @@
       </div>
     </div>
 
-    <!-- Feature Weights Info Modal -->
+
     <div id="weights-info-modal" class="info-modal">
       <div class="info-modal-content">
         <span class="close-modal">&times;</span>
@@ -117,20 +274,173 @@
           selected year, along with their corresponding weights. The higher the weight, the more significant the
           feature. These weights are calculated by multiplying each feature's importance based on the machine learning
           model, and the scaled value of the county for the selected year, on a scale from 0 to 1.</p>
+
+        <h5>Variable Description</h5>
+        <table id="variable-description-table" class="table table-dark table-striped">
+          <thead>
+            <tr>
+              <th scope="col">Variable</th>
+              <th scope="col">Description</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td># associations_per_1000</td>
+              <td>The number of social, civic, and religious associations per 1,000 population, indicating levels of
+                community engagement and social capital.</td>
+            </tr>
+            <tr>
+              <td># chlamydia cases_per_1000</td>
+              <td>The number of reported chlamydia cases per 1,000 population, indicating the prevalence of this
+                sexually transmitted infection.</td>
+            </tr>
+            <tr>
+              <td># dentists_per_1000</td>
+              <td>The number of dentists per 1,000 population, indicating the availability of dental care in the
+                community.</td>
+            </tr>
+            <tr>
+              <td># driving deaths_per_1000</td>
+              <td>The number of deaths resulting from motor vehicle accidents per 1,000 population.</td>
+            </tr>
+            <tr>
+              <td># injury deaths_per_1000</td>
+              <td>The number of deaths due to injuries per 1,000 population, a measure of fatal injuries in the
+                community.</td>
+            </tr>
+            <tr>
+              <td># primary care physicians_per_1000</td>
+              <td>The number of primary care physicians per 1,000 population, reflecting access to basic healthcare
+                services.</td>
+            </tr>
+            <tr>
+              <td># some college_per_1000</td>
+              <td>The number of people per 1,000 population who have attended some college but have not earned a
+                degree, indicating educational attainment in the community.</td>
+            </tr>
+            <tr>
+              <td># uninsured_per_1000</td>
+              <td>The number of people per 1,000 population who lack health insurance, reflecting access to healthcare
+                coverage.</td>
+            </tr>
+            <tr>
+              <td># unemployed_per_1000</td>
+              <td>The number of unemployed individuals per 1,000 population, reflecting economic conditions and job
+                availability.</td>
+            </tr>
+            <tr>
+              <td># workers who drive alone_per_1000</td>
+              <td>The number of workers per 1,000 population who commute alone by car, indicating commuting patterns
+                and reliance on private vehicles.</td>
+            </tr>
+            <tr>
+              <td>% children in poverty</td>
+              <td>The percentage of children under 18 living in households with incomes below the poverty line,
+                reflecting socioeconomic conditions that can impact health and well-being.</td>
+            </tr>
+            <tr>
+              <td>% long commute - drives alone</td>
+              <td>The percentage of workers who drive alone for 30 minutes or more to work, which can impact physical
+                activity levels and contribute to stress.</td>
+            </tr>
+            <tr>
+              <td>% physically inactive</td>
+              <td>The percentage of adults who report no physical activity during their leisure time, a risk factor
+                for various chronic diseases.</td>
+            </tr>
+            <tr>
+              <td>% severe housing problems</td>
+              <td>The percentage of households facing severe housing issues, including overcrowding, high housing
+                costs relative to income, or lack of basic amenities like plumbing or kitchen facilities.</td>
+            </tr>
+            <tr>
+              <td>% some college</td>
+              <td>The percentage of adults aged 25-44 who have attended some college but have not earned a degree,
+                indicating educational attainment.</td>
+            </tr>
+            <tr>
+              <td>% unemployed</td>
+              <td>The percentage of the labor force that is unemployed, an indicator of economic health and stability.
+              </td>
+            </tr>
+            <tr>
+              <td>% uninsured</td>
+              <td>The percentage of the population without health insurance coverage, which can limit access to
+                healthcare services and contribute to poor health outcomes.</td>
+            </tr>
+            <tr>
+              <td>20th percentile income</td>
+              <td>The income level below which 20% of the population falls, often used to assess the income levels of
+                the lower end of the economic spectrum.</td>
+            </tr>
+            <tr>
+              <td>80th percentile income</td>
+              <td>The income level below which 80% of the population falls, indicating the higher end of the income
+                distribution in a community.</td>
+            </tr>
+            <tr>
+              <td>average daily pm2.5</td>
+              <td>The average daily concentration of fine particulate matter (PM2.5) in the air, which is linked to
+                respiratory and cardiovascular health issues.</td>
+            </tr>
+            <tr>
+              <td>chlamydia rate</td>
+              <td>The rate of chlamydia infections per population, indicating the prevalence of this common sexually
+                transmitted infection in a community.</td>
+            </tr>
+            <tr>
+              <td>dentist rate</td>
+              <td>The number of dentists per population, reflecting the availability of dental care services in a
+                community.</td>
+            </tr>
+            <tr>
+              <td>food environment index</td>
+              <td>A composite measure of factors that contribute to a healthy food environment, including access to
+                healthy foods and food security.</td>
+            </tr>
+            <tr>
+              <td>income ratio</td>
+              <td>The ratio of income at the 80th percentile to income at the 20th percentile, used to assess income
+                inequality within a population.</td>
+            </tr>
+            <tr>
+              <td>injury death rate</td>
+              <td>The rate of deaths caused by injuries per population, including those from accidents, violence, and
+                other external causes.</td>
+            <tr>
+              <td>labor force</td>
+              <td>The total number of people aged 16 and over who are either employed or actively seeking employment,
+                reflecting the economic activity of a population.</td>
+            </tr>
+            <tr>
+              <td>population</td>
+              <td>The total number of people living in a given area, used as a basic measure of population size and
+                density.</td>
+            </tr>
+            <tr>
+              <td>teen birth rate</td>
+              <td>The number of live births per 1,000 females aged 15-19, used to assess adolescent reproductive
+                health and related social factors.</td>
+            </tr>
+            <tr>
+              <td>years of potential life lost rate</td>
+              <td>A measure of premature mortality that quantifies the years of life lost due to death before a
+                certain age, often used to assess the impact of early death on a population.</td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     </div>
 
 
-
-    <!-- Generate Report Button -->
     <button id="generate-report" class="btn btn-primary" style="position: fixed; bottom: 20px; right: 20px;">Generate
       Report</button>
 
-    <!-- Bootstrap JS -->
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <!-- Leaflet JS -->
+
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-    <!-- Custom JS -->
+
     <script src="county_script.js"></script>
 </body>
 
