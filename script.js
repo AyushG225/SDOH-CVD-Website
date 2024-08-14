@@ -210,37 +210,41 @@ document.addEventListener("DOMContentLoaded", function () {
 
         layer.on('click', function () {
             var currentZoom = map.getZoom();
+            var zoomThreshold = 5;
+
+            if (currentZoom > zoomThreshold) {
+
+                window.location.href = `county_info.html?county=${feature.properties.GEOID}`;
+            } else {
+
+                map.flyToBounds(layer.getBounds(), {
+                    duration: 1.5,
+                    easeLinearity: 0.25
+                });
 
 
-            map.flyToBounds(layer.getBounds(), {
-                duration: 1.5,
-                easeLinearity: 0.25
-            });
+                map.once('moveend', function () {
+                    if (selectedCountyLayer) {
+
+                        geojsonLayer.resetStyle(selectedCountyLayer);
+                    }
+
+                    selectedCountyLayer = layer;
 
 
-            map.once('moveend', function () {
-                if (selectedCountyLayer) {
-
-                    geojsonLayer.resetStyle(selectedCountyLayer);
-                }
-
-                selectedCountyLayer = layer;
+                    layer.setStyle({
+                        weight: 5,
+                        color: 'black',
+                        fillOpacity: 0.6
+                    }).bringToFront();
 
 
-                layer.setStyle({
-                    weight: 5,
-                    color: 'black',
-                    fillOpacity: 0.6
-                }).bringToFront();
-
-
-                if (currentZoom > 5) {
-                    window.location.href = `county_info.html?county=${feature.properties.GEOID}`;
-                } else {
                     layer.openTooltip();
-                }
-            });
+                });
+            }
         });
+
+
 
 
     }
