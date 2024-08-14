@@ -1,16 +1,16 @@
 document.addEventListener("DOMContentLoaded", function () {
-    
+
     document.getElementById('loading-spinner').style.display = 'block';
 
     var map = L.map('us-map', {
         maxBounds: [
-            [24.396308, -125.0], 
-            [49.384358, -66.93457] 
+            [24.396308, -125.0],
+            [49.384358, -66.93457]
         ],
-        maxBoundsViscosity: 1.0 
+        maxBoundsViscosity: 1.0
     }).setView([37.8, -96], 4);
 
-    
+
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         maxZoom: 18,
         attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
@@ -32,14 +32,14 @@ document.addEventListener("DOMContentLoaded", function () {
         "56": "WY"
     };
 
-    var mostImportantFeaturesCurrent = [];  
-    var mostImportantFeaturesForecast = [];  
-    var cachedDataCurrent = {}; 
-    var cachedDataForecast = {}; 
+    var mostImportantFeaturesCurrent = [];
+    var mostImportantFeaturesForecast = [];
+    var cachedDataCurrent = {};
+    var cachedDataForecast = {};
 
-    var selectedFeature = null; 
+    var selectedFeature = null;
 
-    
+
     Promise.all([
         fetch('most_important_features_year2.json').then(response => response.json()),
         fetch('most_important_features_year_forecast2.json').then(response => response.json())
@@ -48,7 +48,7 @@ document.addEventListener("DOMContentLoaded", function () {
             mostImportantFeaturesCurrent = [...Object.values(data[0])];
             mostImportantFeaturesForecast = [...Object.values(data[1])];
 
-            
+
             mostImportantFeaturesCurrent.forEach(entry => {
                 const year = entry.year;
                 const countyCode = entry["county code"];
@@ -58,9 +58,9 @@ document.addEventListener("DOMContentLoaded", function () {
                 cachedDataCurrent[year][countyCode] = entry.most_important_feature;
             });
 
-            
+
             mostImportantFeaturesForecast.forEach(entry => {
-                const year = entry.year + 2; 
+                const year = entry.year + 2;
                 const countyCode = entry["county code"];
                 if (!cachedDataForecast[year]) {
                     cachedDataForecast[year] = {};
@@ -68,12 +68,12 @@ document.addEventListener("DOMContentLoaded", function () {
                 cachedDataForecast[year][countyCode] = entry.most_important_feature;
             });
 
-            
+
             return fetch('counties.geojson');
         })
         .then(response => response.json())
         .then(data => {
-            counties = data.features;  
+            counties = data.features;
             geojsonLayer = L.geoJSON(data, {
                 style: function (feature) {
                     return getCountyStyle(feature);
@@ -81,25 +81,25 @@ document.addEventListener("DOMContentLoaded", function () {
                 onEachFeature: onEachFeature
             }).addTo(map);
 
-            
+
             var initialYear = document.getElementById('year-slider').value;
             updateMapColor(initialYear);
 
-            
+
             document.getElementById('loading-spinner').style.display = 'none';
 
-            
+
             addLegend(map);
 
         })
         .catch(error => {
             console.error('Error loading data:', error);
-            
+
             document.getElementById('loading-spinner').style.display = 'none';
         });
 
     function getColorByFeature(feature) {
-        
+
         const featureColors = {
             "years of potential life lost rate": "#FF0000",
             "# uninsured_per_1000": "#00FF00",
@@ -110,12 +110,12 @@ document.addEventListener("DOMContentLoaded", function () {
             "# workers who drive alone_per_1000": "#FF00FF"
         };
 
-        
-        return featureColors[feature] || '#999999';  
+
+        return featureColors[feature] || '#999999';
     }
 
     function getMostImportantFeatureForCounty(countyCode, year) {
-        
+
         if (year <= 2023) {
             return cachedDataCurrent[year] ? cachedDataCurrent[year][countyCode] : null;
         } else {
@@ -166,8 +166,10 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     }
 
-    let activeTooltip = null; 
-    let tooltipOpened = false; 
+    let activeTooltip = null;
+    let tooltipOpened = false;
+    var selectedCountyLayer = null;
+
 
     function onEachFeature(feature, layer) {
         var countyCode = feature.properties.GEOID;
@@ -183,52 +185,76 @@ document.addEventListener("DOMContentLoaded", function () {
                 tooltipContent += "<br>No data available for this year.";
             }
             layer.bindTooltip(tooltipContent, {
-                permanent: false, 
+                permanent: false,
                 direction: 'auto'
             });
         }
 
         layer.on('mouseover', function () {
             if (activeTooltip) {
-                activeTooltip.closeTooltip(); 
+                activeTooltip.closeTooltip();
             }
-            updateTooltipContent();  
-            layer.openTooltip();  
-            activeTooltip = layer; 
-            tooltipOpened = true; 
+            updateTooltipContent();
+            layer.openTooltip();
+            activeTooltip = layer;
+            tooltipOpened = true;
         });
 
         layer.on('mouseout', function () {
             if (tooltipOpened) {
-                layer.closeTooltip();  
-                activeTooltip = null; 
-                tooltipOpened = false; 
+                layer.closeTooltip();
+                activeTooltip = null;
+                tooltipOpened = false;
             }
         });
 
         layer.on('click', function () {
             var currentZoom = map.getZoom();
-            if (currentZoom > 5) {  
-                window.location.href = `county_info.html?county=${feature.properties.GEOID}`;
-            } else {
-                map.flyToBounds(layer.getBounds(), {
-                    duration: 1.5, 
-                    easeLinearity: 0.25 
-                });
-            }
+
+
+            map.flyToBounds(layer.getBounds(), {
+                duration: 1.5,
+                easeLinearity: 0.25
+            });
+
+
+            map.once('moveend', function () {
+                if (selectedCountyLayer) {
+
+                    geojsonLayer.resetStyle(selectedCountyLayer);
+                }
+
+                selectedCountyLayer = layer;
+
+
+                layer.setStyle({
+                    weight: 5,
+                    color: 'black',
+                    fillOpacity: 0.6
+                }).bringToFront();
+
+
+                if (currentZoom > 5) {
+                    window.location.href = `county_info.html?county=${feature.properties.GEOID}`;
+                } else {
+                    layer.openTooltip();
+                }
+            });
         });
+
+
     }
 
-    
+
     map.on('movestart', function () {
         if (activeTooltip) {
             activeTooltip.closeTooltip();
             activeTooltip = null;
-            tooltipOpened = false; 
+            tooltipOpened = false;
         }
     });
 
-    
+
     function debounce(func, wait) {
         let timeout;
         return function (...args) {
@@ -240,7 +266,7 @@ document.addEventListener("DOMContentLoaded", function () {
     var yearSlider = document.getElementById('year-slider');
     var selectedYearDisplay = document.getElementById('selected-year');
 
-    
+
     selectedYearDisplay.textContent = yearSlider.value;
 
     yearSlider.addEventListener('input', debounce(function () {
@@ -248,24 +274,28 @@ document.addEventListener("DOMContentLoaded", function () {
         selectedYearDisplay.textContent = selectedYear;
         updateMapColor(selectedYear);
 
-        
+
         updateLegendContent(document.querySelector('.info.legend'));
-    }, 200)); 
+    }, 200));
 
     var initialView = {
         center: [37.8, -96],
         zoom: 4
     };
 
-    
+
     function resetMap() {
-        
+
+        if (selectedCountyLayer) {
+            geojsonLayer.resetStyle(selectedCountyLayer);
+            selectedCountyLayer = null;
+        }
+
         map.flyTo(initialView.center, initialView.zoom, {
-            duration: 0.8, 
-            easeLinearity: 0.25 
+            duration: 0.8,
+            easeLinearity: 0.25
         });
 
-        
         geojsonLayer.eachLayer(function (layer) {
             layer.setStyle({
                 fillOpacity: 0.6,
@@ -273,18 +303,18 @@ document.addEventListener("DOMContentLoaded", function () {
             });
         });
 
-        
         selectedFeature = null;
     }
 
-    
+
+
     document.getElementById('reset-map').addEventListener('click', debounce(resetMap, 150));
 
 
     var searchInput = document.getElementById('search-input');
     var suggestions = document.getElementById('suggestions');
 
-    
+
     function adjustSuggestionsWidth() {
         suggestions.style.width = searchInput.offsetWidth + 'px';
     }
@@ -294,7 +324,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     searchInput.addEventListener('input', function () {
         var query = this.value.toLowerCase();
-        suggestions.innerHTML = '';  
+        suggestions.innerHTML = '';
         suggestions.style.display = 'none';
 
         if (query.length > 0) {
@@ -311,10 +341,10 @@ document.addEventListener("DOMContentLoaded", function () {
                     item.className = 'list-group-item';
                     item.textContent = match.properties.NAME + ", " + stateAbbr + ' (FIPS: ' + match.properties.GEOID + ')';
                     item.addEventListener('click', function () {
-                        searchInput.value = match.properties.NAME + ", " + stateAbbr;  
-                        suggestions.innerHTML = '';  
+                        searchInput.value = match.properties.NAME + ", " + stateAbbr;
+                        suggestions.innerHTML = '';
                         suggestions.style.display = 'none';
-                        zoomToFeature(match);  
+                        zoomToFeature(match);
                     });
                     suggestions.appendChild(item);
                 });
@@ -326,48 +356,66 @@ document.addEventListener("DOMContentLoaded", function () {
         if (geojsonLayer) {
             geojsonLayer.eachLayer(function (layer) {
                 if (layer.feature.properties.GEOID === feature.properties.GEOID) {
-                    
+
+
                     map.flyToBounds(layer.getBounds(), {
-                        duration: 1.5, 
-                        easeLinearity: 0.25 
+                        duration: 1.5,
+                        easeLinearity: 0.25
                     });
 
-                    
-                    setTimeout(function () {
+
+                    map.once('moveend', function () {
+                        if (selectedCountyLayer) {
+
+                            geojsonLayer.resetStyle(selectedCountyLayer);
+                        }
+
+                        selectedCountyLayer = layer;
+
+
+                        layer.setStyle({
+                            weight: 5,
+                            color: 'black',
+                            fillOpacity: 0.6
+                        }).bringToFront();
+
+
                         layer.openTooltip();
-                    }, 1500);  
+                    });
                 }
             });
         }
     }
+
+
 
     function addLegend(map) {
         var legend = L.control({ position: 'topright' });
 
         legend.onAdd = function (map) {
             var div = L.DomUtil.create('div', 'info legend');
-            updateLegendContent(div); 
+            updateLegendContent(div);
 
-            
+
             var infoButton = L.DomUtil.create('button', 'btn btn-info btn-sm', div);
             infoButton.id = 'info-button';
             infoButton.title = 'Go to Variable Descriptions';
             infoButton.innerHTML = '<i class="fas fa-info-circle"></i>';
-            infoButton.style.marginTop = '10px'; 
-            infoButton.style.display = 'block'; 
+            infoButton.style.marginTop = '10px';
+            infoButton.style.display = 'block';
 
-            
+
             infoButton.addEventListener('click', function () {
-                
+
                 document.getElementById('description-section').scrollIntoView({ behavior: 'smooth' });
 
-                
+
                 var descriptionTable = document.getElementById('variable-description-table');
 
-                
+
                 descriptionTable.classList.add('glow');
 
-                
+
                 setTimeout(function () {
                     descriptionTable.classList.remove('glow');
                 }, 2000);
@@ -385,7 +433,7 @@ document.addEventListener("DOMContentLoaded", function () {
         var year = document.getElementById('year-slider').value;
         var features = new Set();
 
-        
+
         geojsonLayer.eachLayer(function (layer) {
             var countyCode = layer.feature.properties.GEOID;
             var mostImportantFeature = getMostImportantFeatureForCounty(countyCode, year);
@@ -394,7 +442,7 @@ document.addEventListener("DOMContentLoaded", function () {
             }
         });
 
-        div.innerHTML = ''; 
+        div.innerHTML = '';
 
         features.forEach(function (feature) {
             div.innerHTML +=
@@ -402,7 +450,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 feature + '<br>';
         });
 
-        
+
         div.querySelectorAll('i').forEach(function (element, index) {
             element.addEventListener('click', function () {
                 var clickedFeature = Array.from(features)[index];
@@ -413,16 +461,16 @@ document.addEventListener("DOMContentLoaded", function () {
 
     function filterMapByFeature(feature) {
         if (selectedFeature === feature) {
-            
+
             selectedFeature = null;
             geojsonLayer.eachLayer(function (layer) {
                 layer.setStyle({
                     fillOpacity: 0.6,
                     opacity: 1,
-                }).bringToFront(); 
+                }).bringToFront();
             });
         } else {
-            
+
             selectedFeature = feature;
             geojsonLayer.eachLayer(function (layer) {
                 var countyCode = layer.feature.properties.GEOID;
@@ -433,12 +481,12 @@ document.addEventListener("DOMContentLoaded", function () {
                     layer.setStyle({
                         fillOpacity: 0.6,
                         opacity: 1,
-                    }).bringToFront(); 
+                    }).bringToFront();
                 } else {
                     layer.setStyle({
                         fillOpacity: 0.1,
                         opacity: 0.1,
-                    }).bringToBack(); 
+                    }).bringToBack();
                 }
             });
         }

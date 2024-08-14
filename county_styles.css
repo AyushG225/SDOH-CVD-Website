@@ -58,7 +58,7 @@ body {
     border: 1px solid #555;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
-    background-color: #222;
+    background-color: #333;
 }
 
 
@@ -89,7 +89,7 @@ body {
     border: 1px solid #555;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
-    background-color: #111;
+    background-color: #333;
     color: #ddd;
 }
 
@@ -116,7 +116,7 @@ body {
 }
 
 #feature-weights-table th {
-    background-color: #333;
+    background-color: #555;
     font-weight: bold;
 }
 
