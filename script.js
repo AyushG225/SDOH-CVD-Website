@@ -1,5 +1,14 @@
 document.addEventListener("DOMContentLoaded", function () {
 
+    if (!sessionStorage.getItem("hasVisited")) {
+        document.getElementById('map-instructions-overlay').style.visibility = 'visible';
+        sessionStorage.setItem("hasVisited", "true");
+    }
+
+    document.getElementById('close-overlay').addEventListener('click', function () {
+        document.getElementById('map-instructions-overlay').style.visibility = 'hidden';
+    });
+
     document.getElementById('loading-spinner').style.display = 'block';
 
     var map = L.map('us-map', {
@@ -269,6 +278,33 @@ document.addEventListener("DOMContentLoaded", function () {
 
     var yearSlider = document.getElementById('year-slider');
     var selectedYearDisplay = document.getElementById('selected-year');
+
+    let isPlaying = false;
+    let playInterval;
+
+    const playPauseButton = document.getElementById('play-pause-button');
+    const endYear = parseInt(yearSlider.max);
+
+    playPauseButton.addEventListener('click', function () {
+        if (isPlaying) {
+            clearInterval(playInterval);
+            playPauseButton.innerHTML = '<i class="fas fa-play"></i>';
+        } else {
+            playPauseButton.innerHTML = '<i class="fas fa-pause"></i>';
+            playInterval = setInterval(() => {
+                if (parseInt(yearSlider.value) < endYear) {
+                    yearSlider.value = parseInt(yearSlider.value) + 1;
+                } else {
+                    clearInterval(playInterval);
+                    playPauseButton.innerHTML = '<i class="fas fa-play"></i>';
+                    isPlaying = false;
+                }
+                selectedYearDisplay.textContent = yearSlider.value;
+                updateMapColor(yearSlider.value);
+            }, 1000);
+        }
+        isPlaying = !isPlaying;
+    });
 
 
     selectedYearDisplay.textContent = yearSlider.value;

@@ -56,12 +56,25 @@
 
   <div class="map-container">
     <div id="us-map">
+      <div id="map-instructions-overlay" class="overlay">
+        <div class="overlay-content">
+          <h3>How to Use the Map</h3>
+          <p>Use the slider below the map to explore data across different years. The map will update to show the most
+            important variables correlated with cardiovascular disease death rates for the selected year. Click on any
+            county to zoom in, and click again to open a county unique page with detailed information. Use the search
+            bar above the map to search for specific counties by name or FIPS code.</p>
+          <button id="close-overlay">I Understand</button>
+        </div>
+      </div>
       <button id="reset-map" class="leaflet-control leaflet-bar" title="Reset Map">
         <i class="fas fa-undo"></i>
       </button>
     </div>
     <div class="year-slider-container">
-      <input type="range" id="year-slider" min="2015" max="2025" value="2015" step="1" class="slider" list="tickmarks">
+      <button id="play-pause-button" class="play-btn">
+        <i class="fas fa-play"></i>
+      </button>
+      <input type="range" id="year-slider" min="2015" max="2025" value="2015" step="1" list="tickmarks">
       <datalist id="tickmarks">
         <option value="2015"></option>
         <option value="2016"></option>
