@@ -145,18 +145,16 @@ function cacheAllFeatureWeights(countyGEOID) {
 
         Promise.all([
             fetch('SDOH+HeartData2.json').then(response => response.json()),
-            fetch('percentile_county_data.json').then(response => response.json()),
-            fetch('feature_importances.json').then(response => response.json()),
-            fetch('feature_importances_forecast.json').then(response => response.json())
-        ]).then(([countyData, percentileData, featureImportances, featureImportancesForecast]) => {
+            fetch('nonlinear_county_data.json').then(response => response.json()),
+            fetch('nonlinear_forecast_county_data.json').then(response => response.json()),
+            fetch('feature_importances3.json').then(response => response.json())
+        ]).then(([countyData, nonlinearData, nonlinearForecastData, featureImportances]) => {
             cachedMostImportantFeatures[countyGEOID] = {};
 
             years.forEach(year => {
-                const isForecastYear = year >= 2024;
-                const dataYear = isForecastYear ? year - 2 : year;
-                const importances = isForecastYear ? featureImportancesForecast : featureImportances;
+                const data = {...nonlinearData, ...nonlinearForecastData};
 
-                let { mostImportantFeature, importantFeatures } = calculateMostImportantFeature(countyData, percentileData, dataYear, countyGEOID, importances);
+                let { mostImportantFeature, importantFeatures } = calculateMostImportantFeature(countyData, data, year, countyGEOID, featureImportances);
                 cachedMostImportantFeatures[countyGEOID][year] = { mostImportantFeature, important_features: importantFeatures };
             });
 
@@ -168,11 +166,11 @@ function cacheAllFeatureWeights(countyGEOID) {
     });
 }
 
-function calculateMostImportantFeature(countyData, percentileData, year, countyCode, featureImportances) {
-    const countyYearData = Object.values(countyData).find(entry => entry['county code'] === countyCode && entry.year === year);
-    const percentileYearData = Object.values(percentileData).find(entry => entry['county code'] === countyCode && entry.year == year);
-
-    if (!countyYearData || !percentileYearData) {
+function calculateMostImportantFeature(countyData, nonlinearData, year, countyCode, featureImportances) {
+    // const countyYearData = Object.values(countyData).find(entry => entry['county code'] === countyCode && entry.year === year);
+    const nonlinearYearData = Object.values(nonlinearData).find(entry => entry['county code'] === countyCode && entry.year == year);
+    // console.log(nonlinearYearData);
+    if (!nonlinearYearData) {
         console.error(`County code ${countyCode} not found for year ${year}`);
         return { mostImportantFeature: 'None Found', importantFeatures: [] };
     }
@@ -186,8 +184,9 @@ function calculateMostImportantFeature(countyData, percentileData, year, countyC
         const importance = featureImportances[key].Importance;
 
 
-        if (feature !== 'year' && percentileYearData.hasOwnProperty(feature)) {
-            let featureVal = percentileYearData[feature];
+        if (feature !== 'year' && nonlinearYearData.hasOwnProperty(feature)) {
+            // console.log(feature);
+            let featureVal = nonlinearYearData[feature];
             if (flipRankMapping[feature] === 1) {
                 featureVal = 1 - featureVal;
             }
@@ -242,13 +241,37 @@ function updateCountyColor(geoJsonLayer, mostImportantFeature) {
 
 function getColorByFeature(feature) {
     const featureColors = {
-        "years of potential life lost rate": "#FF0000",
-        "# uninsured_per_1000": "#00FF00",
-        "# associations_per_1000": "#0000FF",
-        "# some college_per_1000": "#FFFF00",
-        "# injury deaths_per_1000": "#FFA500",
-        "average daily pm2.5": "#A020F0",
-        "# workers who drive alone_per_1000": "#FF00FF"
+        'years of potential life lost rate': '#FF5733',    // -1
+        '% children in poverty': '#33FFBD',               // -1
+        '80th percentile income': '#3385FF',              // 1
+        '% severe housing problems': '#FF33A6',           // -1
+        'chlamydia rate': '#FFD133',                      // -1
+        'teen birth rate': '#33FF57',                     // -1
+        '20th percentile income': '#33D1FF',              // 1
+        '% long commute - drives alone': '#FF8333',       // -1
+        'dentist rate': '#BD33FF',                        // 1
+        '% physically inactive': '#FF3333',               // -1
+        '% unemployed': '#33FF83',                        // -1
+        'food environment index': '#5733FF',              // 1
+        'labor force': '#33FFA6',                         // 1
+        'average daily pm2.5': '#FF3385',                 // -1
+        '% some college': '#D1FF33',                      // 1
+        '% uninsured': '#3385FF',                         // -1
+        'injury death rate': '#FF5733',                   // -1
+        'income ratio': '#3383FF',                        // -1
+        'population': '#A6FF33',                          // 1
+        'deaths_per_1000': '#FF3333',                     // -1
+        '# workers who drive alone_per_1000': '#33FFBD',  // -1
+        '# uninsured_per_1000': '#FF5733',                // -1
+        '# associations_per_1000': '#3357FF',             // 1
+        '# unemployed_per_1000': '#FF33A6',               // -1
+        '# dentists_per_1000': '#5733FF',                 // 1
+        '# injury deaths_per_1000': '#FF8333',            // -1
+        '# chlamydia cases_per_1000': '#FFD133',          // -1
+        '# alcohol-impaired driving deaths_per_1000': '#33FF57',  // -1
+        '# driving deaths_per_1000': '#FF3385',           // -1
+        '# primary care physicians_per_1000': '#33D1FF',  // 1
+        '# some college_per_1000': '#D1FF33'              // 1
     };
 
     return featureColors[feature] || '#999999';
@@ -276,7 +299,7 @@ function displayFeatureWeights(importantFeatures) {
 function loadAndCreateChart(countyGEOID) {
     Promise.all([
         fetch('current_deaths.json').then(response => response.json()),
-        fetch('deaths_forecast.json').then(response => response.json())
+        fetch('deaths_forecast2.json').then(response => response.json())
     ]).then(([currentData, forecastData]) => {
         const years = [];
         const currentDeaths = {};
@@ -294,14 +317,15 @@ function loadAndCreateChart(countyGEOID) {
             if (forecastData[key]['county code'] === countyGEOID) {
                 const year = forecastData[key].year;
                 if (!years.includes(year)) years.push(year);
-                forecastDeaths[year] = forecastData[key].deaths_per_1000;
+                forecastDeaths[year] = forecastData[key].deaths_per_1000_predicted;
+                // console.log(forecastDeaths[year]);
             }
         }
 
         years.sort((a, b) => a - b);
 
         const lastActualYear = Math.max(...Object.keys(currentDeaths).map(Number));
-
+        // console.log(lastActualYear);
         const currentDataArray = years.map(year => currentDeaths[year] !== undefined ? currentDeaths[year] : null);
         const forecastDataArray = years.map(year => {
             if (year === lastActualYear) {
@@ -309,6 +333,7 @@ function loadAndCreateChart(countyGEOID) {
             }
             return year > lastActualYear ? forecastDeaths[year] : null;
         });
+        console.log(forecastDataArray);
 
         const ctx = document.getElementById('deathsChart').getContext('2d');
 
@@ -452,12 +477,12 @@ const flipRankMapping = {
     '% some college': 1,
     '% uninsured': -1,
     'injury death rate': -1,
-    'income ratio': 1,
+    'income ratio': -1,
     'population': 1,
     'deaths_per_1000': -1,
     '# workers who drive alone_per_1000': -1,
     '# uninsured_per_1000': -1,
-    '# associations_per_1000': -1,
+    '# associations_per_1000': 1,
     '# unemployed_per_1000': -1,
     '# dentists_per_1000': 1,
     '# injury deaths_per_1000': -1,

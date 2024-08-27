@@ -50,8 +50,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
     Promise.all([
-        fetch('most_important_features_year2.json').then(response => response.json()),
-        fetch('most_important_features_year_forecast2.json').then(response => response.json())
+        fetch('most_important_features_year_nonlinear.json').then(response => response.json()),
+        fetch('most_important_features_year_forecast_nonlinear.json').then(response => response.json())
     ])
         .then(data => {
             mostImportantFeaturesCurrent = [...Object.values(data[0])];
@@ -69,7 +69,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
             mostImportantFeaturesForecast.forEach(entry => {
-                const year = entry.year + 2;
+                const year = entry.year;
                 const countyCode = entry["county code"];
                 if (!cachedDataForecast[year]) {
                     cachedDataForecast[year] = {};
@@ -110,13 +110,37 @@ document.addEventListener("DOMContentLoaded", function () {
     function getColorByFeature(feature) {
 
         const featureColors = {
-            "years of potential life lost rate": "#FF0000",
-            "# uninsured_per_1000": "#00FF00",
-            "# associations_per_1000": "#0000FF",
-            "# some college_per_1000": "#FFFF00",
-            "# injury deaths_per_1000": "#FFA500",
-            "average daily pm2.5": "#A020F0",
-            "# workers who drive alone_per_1000": "#FF00FF"
+            'years of potential life lost rate': '#FF5733',    // -1
+            '% children in poverty': '#33FFBD',               // -1
+            '80th percentile income': '#3385FF',              // 1
+            '% severe housing problems': '#FF33A6',           // -1
+            'chlamydia rate': '#FFD133',                      // -1
+            'teen birth rate': '#33FF57',                     // -1
+            '20th percentile income': '#33D1FF',              // 1
+            '% long commute - drives alone': '#FF8333',       // -1
+            'dentist rate': '#BD33FF',                        // 1
+            '% physically inactive': '#FF3333',               // -1
+            '% unemployed': '#33FF83',                        // -1
+            'food environment index': '#5733FF',              // 1
+            'labor force': '#33FFA6',                         // 1
+            'average daily pm2.5': '#FF3385',                 // -1
+            '% some college': '#D1FF33',                      // 1
+            '% uninsured': '#3385FF',                         // -1
+            'injury death rate': '#FF5733',                   // -1
+            'income ratio': '#3383FF',                        // -1
+            'population': '#A6FF33',                          // 1
+            'deaths_per_1000': '#FF3333',                     // -1
+            '# workers who drive alone_per_1000': '#33FFBD',  // -1
+            '# uninsured_per_1000': '#FF5733',                // -1
+            '# associations_per_1000': '#3357FF',             // 1
+            '# unemployed_per_1000': '#FF33A6',               // -1
+            '# dentists_per_1000': '#5733FF',                 // 1
+            '# injury deaths_per_1000': '#FF8333',            // -1
+            '# chlamydia cases_per_1000': '#FFD133',          // -1
+            '# alcohol-impaired driving deaths_per_1000': '#33FF57',  // -1
+            '# driving deaths_per_1000': '#FF3385',           // -1
+            '# primary care physicians_per_1000': '#33D1FF',  // 1
+            '# some college_per_1000': '#D1FF33'              // 1
         };
 
 
